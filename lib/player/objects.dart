@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class PlayersState extends ChangeNotifier {
   List<Player> players = [];
 
-  PlayersState({@required this.players});
+  PlayersState({@required this.players}) {
+    notifyListeners();
+  }
 
   void add(Player player) {
     players.add(player);
@@ -16,10 +18,7 @@ class PlayersState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void set(int index, Player player) {
-    players[index] = player;
-    notifyListeners();
-  }
+  void submit() => notifyListeners();
 }
 
 class Player {

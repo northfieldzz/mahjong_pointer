@@ -14,24 +14,10 @@ class PlayersPage extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => PlayersState(players: players),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Players'),
-          leading: _buildBackButton(context),
-        ),
+        appBar: AppBar(title: Text('Players')),
         body: PlayersForm(),
         resizeToAvoidBottomPadding: false,
       ),
-    );
-  }
-
-  Widget _buildBackButton(BuildContext context) {
-    return Consumer<PlayersState>(
-      builder: (context, playersState, child) {
-        return IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () => Navigator.pop(context, playersState.players),
-        );
-      },
     );
   }
 }
@@ -49,6 +35,7 @@ class PlayersForm extends StatelessWidget {
                 itemCount: playersState.players.length,
                 itemBuilder: (context, index) => PlayerInput(
                   index: index,
+                  initialName: playersState.players[index].name,
                   label: 'Player ${index + 1}',
                   onRemove: () {
                     if (3 >= playersState.players.length) return;
@@ -76,9 +63,15 @@ class PlayersForm extends StatelessWidget {
 class PlayerInput extends StatelessWidget {
   final int index;
   final String label;
+  final String initialName;
   final VoidCallback onRemove;
 
-  PlayerInput({this.index, this.label, this.onRemove});
+  PlayerInput({
+    this.index,
+    this.label,
+    this.initialName = '',
+    this.onRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -99,14 +92,12 @@ class PlayerInput extends StatelessWidget {
                 ],
               ),
               TextField(
+                controller: TextEditingController(text: initialName),
                 decoration: const InputDecoration(
                   labelText: 'player name',
                   hintText: 'enter player name',
                 ),
-                onChanged: (name) {
-                  _player.name = name;
-                  playersState.set(index, _player);
-                },
+                onChanged: (name) => _player.name = name,
               ),
             ],
           ),

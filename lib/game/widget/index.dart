@@ -5,6 +5,7 @@ import 'package:mahjong_pointer/player/widget/index.dart';
 import 'package:provider/provider.dart';
 
 import '../objects.dart';
+import 'setting.dart';
 
 class GamePage extends StatelessWidget {
   final List<Player> players;
@@ -18,29 +19,55 @@ class GamePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Game'),
-          actions: [_buildPlayers(context)],
+          leading: _buildReset(),
+          actions: [
+            _buildPlayers(),
+            _buildSetting(),
+          ],
         ),
         body: PointWidget(),
       ),
     );
   }
 
-  Widget _buildPlayers(BuildContext context) {
+  Widget _buildPlayers() {
     return Consumer<GameState>(
       builder: (context, gameState, child) {
         return IconButton(
           icon: Icon(Icons.supervised_user_circle_outlined),
-          onPressed: () async {
-            final _players = await Navigator.push<List<Player>>(
-              context,
-              MaterialPageRoute(
-                builder: (context) => PlayersPage(
-                  players: gameState.players,
-                ),
-              ),
-            );
-            gameState.setPlayers(_players);
-          },
+          onPressed: () async => await Navigator.push<List<Player>>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlayersPage(players: gameState.players),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSetting() {
+    return Consumer<GameState>(
+      builder: (context, gameState, child) {
+        return IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () async => await Navigator.push<Setting>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SettingsPage(setting: gameState.setting),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildReset() {
+    return Consumer<GameState>(
+      builder: (context, gameState, child) {
+        return IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () => gameState.resetPoint(),
         );
       },
     );
@@ -56,12 +83,16 @@ class PointWidget extends StatelessWidget {
           padding: EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
-              _buildBurger(player: gameState.players[3]),
+              gameState.players.length == 4
+                  ? _buildBurger(player: gameState.players[3])
+                  : Container(
+                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                    ),
               _buildHorizontal(
-                leftPlayer: gameState.players[1],
+                leftPlayer: gameState.players[0],
                 rightPlayer: gameState.players[2],
               ),
-              _buildBurger(player: gameState.players[0]),
+              _buildBurger(player: gameState.players[1]),
             ],
           ),
         );
@@ -74,7 +105,7 @@ class PointWidget extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
       child: Column(
         children: <Widget>[
-          Text(player.name),
+          Text(player.name.isNotEmpty ? player.name : 'No Name Player'),
           Text(player.point.toString()),
         ],
       ),
