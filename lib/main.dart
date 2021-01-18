@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'game/widget/index.dart';
-import 'player/objects.dart';
 
 void main() => runApp(MahjongPointerApp());
 
@@ -23,12 +22,7 @@ class MahjongPointerApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: GamePage(players: [
-        Player(name: 'Player 1'),
-        Player(name: 'Player 2'),
-        Player(name: 'Player 3'),
-        Player(name: 'Player 4'),
-      ]),
+      home: GamePage(),
     );
   }
 }

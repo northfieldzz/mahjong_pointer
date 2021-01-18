@@ -5,14 +5,27 @@ import 'package:provider/provider.dart';
 import '../objects.dart';
 
 class PlayersPage extends StatelessWidget {
-  final List<Player> players;
+  final Player player0;
+  final Player player1;
+  final Player player2;
+  final Player player3;
 
-  PlayersPage({this.players});
+  PlayersPage({
+    this.player0,
+    this.player1,
+    this.player2,
+    this.player3,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => PlayersState(players: players),
+      create: (context) => PlayersState(
+        player0: player0,
+        player1: player1,
+        player2: player2,
+        player3: player3,
+      ),
       child: Scaffold(
         appBar: AppBar(title: Text('Players')),
         body: PlayersForm(),
@@ -25,84 +38,44 @@ class PlayersPage extends StatelessWidget {
 class PlayersForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<PlayersState>(
-      builder: (context, playersState, child) {
-        return Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              ListView.builder(
-                itemCount: playersState.players.length,
-                itemBuilder: (context, index) => PlayerInput(
-                  index: index,
-                  initialName: playersState.players[index].name,
-                  label: 'Player ${index + 1}',
-                  onRemove: () {
-                    if (3 >= playersState.players.length) return;
-                    playersState.removeAt(index);
-                  },
-                ),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  if (4 <= playersState.players.length) return;
-                  playersState.add(Player(name: '', point: 25000));
-                },
-              ),
-            ],
-          ),
-        );
-      },
+    final state = context.watch<PlayersState>();
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          PlayerInput(player: state.player0),
+          PlayerInput(player: state.player1),
+          PlayerInput(player: state.player2),
+          PlayerInput(player: state.player3),
+          IconButton(icon: Icon(Icons.add), onPressed: () {})
+        ],
+      ),
     );
   }
 }
 
 class PlayerInput extends StatelessWidget {
-  final int index;
-  final String label;
-  final String initialName;
-  final VoidCallback onRemove;
+  final Player player;
 
-  PlayerInput({
-    this.index,
-    this.label,
-    this.initialName = '',
-    this.onRemove,
-  });
+  PlayerInput({this.player});
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<PlayersState>(
-      builder: (context, playersState, child) {
-        var _player = playersState.players[index];
-        return Container(
-          padding: EdgeInsets.only(top: 20.0),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Text(label),
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: onRemove,
-                  ),
-                ],
-              ),
-              TextField(
-                controller: TextEditingController(text: initialName),
-                decoration: const InputDecoration(
-                  labelText: 'player name',
-                  hintText: 'enter player name',
-                ),
-                onChanged: (name) => _player.name = name,
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.only(top: 20.0),
+      child: Column(
+        children: <Widget>[
+          Text(player.name),
+          TextField(
+            controller: TextEditingController(text: player.name),
+            decoration: const InputDecoration(
+              labelText: 'player name',
+              hintText: 'enter player name',
+            ),
+            onChanged: (name) => player.name = name,
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
