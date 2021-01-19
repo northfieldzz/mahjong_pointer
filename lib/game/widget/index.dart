@@ -26,21 +26,18 @@ class GamePage extends StatelessWidget {
             actions: [
               IconButton(
                 icon: Icon(Icons.supervised_user_circle_outlined),
-                onPressed: () => Navigator.push(
+                onPressed: () async =>
+                    state.houses = await Navigator.push<Houses>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PlayersPage(
-                      player0: state.player0,
-                      player1: state.player1,
-                      player2: state.player2,
-                      player3: state.player3,
-                    ),
+                    builder: (context) => HousesPage(houses: state.houses),
                   ),
                 ),
               ),
               IconButton(
                 icon: Icon(Icons.settings),
-                onPressed: () => Navigator.push(
+                onPressed: () async =>
+                    state.setting = await Navigator.push<Setting>(
                   context,
                   MaterialPageRoute(
                     builder: (context) => SettingsPage(setting: state.setting),
@@ -74,40 +71,46 @@ class PointWidget extends StatelessWidget {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              PlayerWidget(
-                player: gameState.player3,
-                isReceive: dragState.isTargetPlayer3,
-                onDragStarted: dragState.dragPlayer3,
+              HouseWidget(
+                house: gameState.houses.playerTop,
+                isReceive: dragState.playerTop,
+                onDragStarted: dragState.dragPlayerTop,
                 onDragEnd: (_) => dragState.reset(),
               ),
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: PlayerWidget(
-                      player: gameState.player0,
-                      isReceive: dragState.isTargetPlayer0,
-                      onDragStarted: dragState.dragPlayer0,
+                    child: HouseWidget(
+                      house: gameState.houses.playerLeft,
+                      isReceive: dragState.playerLeft,
+                      onDragStarted: dragState.dragPlayerLeft,
                       onDragEnd: (_) => dragState.reset(),
                     ),
                   ),
-                  CustomPaint(
-                    painter: SquarePainter(),
-                    child: CreditorWidget(child: Container()),
+                  ConstrainedBox(
+                    constraints: BoxConstraints.loose(Size(100.0, 100.0)),
+                    child: Container(
+                      color: Colors.black,
+                      child: CustomPaint(
+                        painter: SquarePainter(),
+                        child: CreditorWidget(child: Container()),
+                      ),
+                    ),
                   ),
                   Expanded(
-                    child: PlayerWidget(
-                      player: gameState.player2,
-                      isReceive: dragState.isTargetPlayer2,
-                      onDragStarted: dragState.dragPlayer2,
+                    child: HouseWidget(
+                      house: gameState.houses.playerRight,
+                      isReceive: dragState.playerRight,
+                      onDragStarted: dragState.dragPlayerRight,
                       onDragEnd: (_) => dragState.reset(),
                     ),
                   )
                 ],
               ),
-              PlayerWidget(
-                player: gameState.player1,
-                isReceive: dragState.isTargetPlayer1,
-                onDragStarted: dragState.dragPlayer1,
+              HouseWidget(
+                house: gameState.houses.playerBottom,
+                isReceive: dragState.playerBottom,
+                onDragStarted: dragState.dragPlayerBottom,
                 onDragEnd: (_) => dragState.reset(),
               ),
             ],
@@ -118,14 +121,14 @@ class PointWidget extends StatelessWidget {
   }
 }
 
-class PlayerWidget extends StatelessWidget {
-  final Player player;
+class HouseWidget extends StatelessWidget {
+  final House house;
   final bool isReceive;
   final VoidCallback onDragStarted;
-  final Function(Player) onDragEnd;
+  final Function(House) onDragEnd;
 
-  PlayerWidget({
-    @required this.player,
+  HouseWidget({
+    @required this.house,
     this.isReceive = false,
     @required this.onDragStarted,
     @required this.onDragEnd,
@@ -135,19 +138,20 @@ class PlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Text(player.name),
+        Text('${house.direction.display}家'),
+        Text(house.player.name),
         isReceive
             ? CreditorWidget(
-                creditor: player,
+                creditor: house,
                 child: Icon(Icons.face_retouching_natural, size: 90),
               )
             : DebtorWidget(
-                debtor: player,
+                debtor: house,
                 child: Icon(Icons.person_sharp, size: 90),
                 onDragStarted: onDragStarted,
                 onDragEnd: onDragEnd,
               ),
-        Text(player.point.toString()),
+        Text(house.player.point.toString()),
       ],
     );
   }

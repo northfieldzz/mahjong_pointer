@@ -1,64 +1,74 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+/// 方角
+enum Direction {
+  /// 東
+  East,
 
-class PlayersState extends ChangeNotifier {
-  Player _player0;
-  Player _player1;
-  Player _player2;
-  Player _player3;
-  bool _isThreePlayer = false;
+  /// 南
+  South,
 
-  PlayersState({
-    Player player0,
-    Player player1,
-    Player player2,
-    Player player3,
-  }) {
-    _player0 = player0;
-    _player1 = player1;
-    _player2 = player2;
-    _player3 = player3;
-    notifyListeners();
-  }
+  /// 西
+  West,
 
-  set player0(Player player) {
-    _player0 = player;
-    notifyListeners();
-  }
-
-  Player get player0 => _player0;
-
-  set player1(Player player) {
-    _player1 = player;
-    notifyListeners();
-  }
-
-  Player get player1 => _player1;
-
-  set player2(Player player) {
-    _player2 = player;
-    notifyListeners();
-  }
-
-  Player get player2 => _player2;
-
-  set player3(Player player) {
-    _player3 = player;
-    notifyListeners();
-  }
-
-  Player get player3 => _player3;
-
-  set isThreePlayer(bool isThree) {
-    _isThreePlayer = isThree;
-    notifyListeners();
-  }
-
-  bool get isThreePlayer => _isThreePlayer;
-
-// void submit() => notifyListeners();
+  /// 北
+  North,
 }
 
+extension DirectionExtension on Direction {
+  static const displays = <Direction, String>{
+    Direction.East: '東',
+    Direction.South: '南',
+    Direction.West: '西',
+    Direction.North: '北'
+  };
+
+  /// 表示名
+  String get display => displays[this];
+}
+
+/// 東家
+class EastHouse extends House {
+  EastHouse({Player player})
+      : super(
+          player: player,
+          direction: Direction.East,
+        );
+}
+
+/// 南家
+class SouthHouse extends House {
+  SouthHouse({Player player})
+      : super(
+          player: player,
+          direction: Direction.South,
+        );
+}
+
+/// 西家
+class WestHouse extends House {
+  WestHouse({Player player})
+      : super(
+          player: player,
+          direction: Direction.West,
+        );
+}
+
+/// 北家
+class NorthHouse extends House {
+  NorthHouse({Player player})
+      : super(
+          player: player,
+          direction: Direction.North,
+        );
+}
+
+class House {
+  Player player;
+  final Direction direction;
+
+  House({this.player, this.direction});
+}
+
+/// プレイヤー
 class Player {
   String name;
   int point;

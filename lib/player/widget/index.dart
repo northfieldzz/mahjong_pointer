@@ -1,63 +1,83 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../objects.dart';
 
-class PlayersPage extends StatelessWidget {
-  final Player player0;
-  final Player player1;
-  final Player player2;
-  final Player player3;
+class Houses {
+  House playerTop;
+  House playerLeft;
+  House playerBottom;
+  House playerRight;
 
-  PlayersPage({
-    this.player0,
-    this.player1,
-    this.player2,
-    this.player3,
+  Houses({
+    this.playerTop,
+    this.playerLeft,
+    this.playerBottom,
+    this.playerRight,
   });
 
+  /// ローテーション
+  void rotate() {
+    final tempHouse = playerRight;
+    playerRight = playerBottom;
+    playerBottom = playerLeft;
+    playerLeft = playerTop;
+    playerTop = tempHouse;
+
+    final tempPlayer = playerTop.player;
+    playerTop.player = playerLeft.player;
+    playerLeft.player = playerBottom.player;
+    playerBottom.player = playerRight.player;
+    playerRight.player = tempPlayer;
+  }
+
+  void reset({int point}) {
+    playerTop.player.point = point;
+    playerLeft.player.point = point;
+    playerBottom.player.point = point;
+    playerRight.player.point = point;
+  }
+}
+
+class HousesPage extends StatelessWidget {
+  final Houses houses;
+
+  HousesPage({this.houses});
+
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => PlayersState(
-        player0: player0,
-        player1: player1,
-        player2: player2,
-        player3: player3,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Players'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_outlined),
+          onPressed: () => Navigator.pop(context, houses),
+        ),
       ),
-      child: Scaffold(
-        appBar: AppBar(title: Text('Players')),
-        body: PlayersForm(),
-        resizeToAvoidBottomPadding: false,
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            HousesInput(house: houses.playerTop),
+            HousesInput(house: houses.playerLeft),
+            HousesInput(house: houses.playerBottom),
+            HousesInput(house: houses.playerRight),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => null,
+            ),
+          ],
+        ),
       ),
+      resizeToAvoidBottomPadding: false,
     );
   }
 }
 
-class PlayersForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<PlayersState>();
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          PlayerInput(player: state.player0),
-          PlayerInput(player: state.player1),
-          PlayerInput(player: state.player2),
-          PlayerInput(player: state.player3),
-          IconButton(icon: Icon(Icons.add), onPressed: () {})
-        ],
-      ),
-    );
-  }
-}
+class HousesInput extends StatelessWidget {
+  final House house;
 
-class PlayerInput extends StatelessWidget {
-  final Player player;
-
-  PlayerInput({this.player});
+  HousesInput({this.house});
 
   @override
   Widget build(BuildContext context) {
@@ -65,14 +85,14 @@ class PlayerInput extends StatelessWidget {
       padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
-          Text(player.name),
+          Text('${house.direction.display}家'),
           TextField(
-            controller: TextEditingController(text: player.name),
+            controller: TextEditingController(text: house.player.name),
             decoration: const InputDecoration(
               labelText: 'player name',
               hintText: 'enter player name',
             ),
-            onChanged: (name) => player.name = name,
+            onChanged: (name) => house.player.name = name,
           ),
         ],
       ),

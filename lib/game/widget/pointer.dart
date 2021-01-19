@@ -7,10 +7,10 @@ import 'package:mahjong_pointer/player/objects.dart';
 import 'package:provider/provider.dart';
 
 class DebtorWidget extends StatelessWidget {
-  final Player debtor;
+  final House debtor;
   final Widget child;
   final VoidCallback onDragStarted;
-  final Function(Player) onDragEnd;
+  final Function(House) onDragEnd;
 
   DebtorWidget({
     this.debtor,
@@ -35,7 +35,7 @@ class DebtorWidget extends StatelessWidget {
 }
 
 class CreditorWidget extends StatelessWidget {
-  final Player creditor;
+  final House creditor;
   final Widget child;
 
   bool get isCenterConsole => Player == null;
@@ -48,26 +48,28 @@ class CreditorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<GameState>();
-    return DragTarget<Player>(
+    return DragTarget<House>(
       builder: (context, candidateData, rejectedData) => child,
       onWillAccept: (data) => true,
       onAccept: (debtor) async {
         if (isCenterConsole) {
           state.boardStock += 1000;
         } else {
-          // TODO: 得点算出ロジックの実装
           final point = await Navigator.push<int>(
             context,
             MaterialPageRoute(
-              builder: (context) => PointSelector(isDealer: false),
+              builder: (context) => PointSelector(
+                isDealer: creditor.direction == Direction.East,
+              ),
             ),
           );
           if (point == null) {
             return null;
           }
-          debtor.point -= point;
-          creditor.point += point;
+          debtor.player.point -= point;
+          creditor.player.point += point;
           state.submit();
+          state.rotateHouse();
         }
       },
       onLeave: (data) => print('DragTarget.onLeave'),

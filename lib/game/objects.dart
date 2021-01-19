@@ -1,82 +1,74 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mahjong_pointer/player/objects.dart';
+import 'package:mahjong_pointer/player/widget/index.dart';
 
-class GamePageState {
-  Player player;
-  bool isTarget;
-}
+const defaultPoint = 25000;
 
 class GameState extends ChangeNotifier {
-  Player _player0 = Player(name: 'Player 1');
-  Player _player1 = Player(name: 'Player 2');
-  Player _player2 = Player(name: 'Player 3');
-  Player _player3 = Player(name: 'Player 4');
+  Houses _houses = Houses(
+    playerTop: EastHouse(
+      player: Player(
+        name: 'Player East',
+        point: defaultPoint,
+      ),
+    ),
+    playerLeft: SouthHouse(
+      player: Player(
+        name: 'Player South',
+        point: defaultPoint,
+      ),
+    ),
+    playerBottom: WestHouse(
+      player: Player(
+        name: 'Player West',
+        point: defaultPoint,
+      ),
+    ),
+    playerRight: NorthHouse(
+      player: Player(
+        name: 'Player North',
+        point: defaultPoint,
+      ),
+    ),
+  );
+
   var _setting = Setting();
   var _boardStock = 0;
 
-  set player0(Player player) {
-    _player0 = player;
-    notifyListeners();
-  }
+  Houses get houses => _houses;
 
-  Player get player0 => _player0;
-
-  set player1(Player player) {
-    _player1 = player;
-    notifyListeners();
-  }
-
-  Player get player1 => _player1;
-
-  set player2(Player player) {
-    _player2 = player;
-    notifyListeners();
-  }
-
-  Player get player2 => _player2;
-
-  set player3(Player player) {
-    _player3 = player;
-    notifyListeners();
-  }
-
-  Player get player3 => _player3;
-
-  set setting(Setting setting) {
-    _setting = setting;
-    notifyListeners();
+  set houses(Houses newInput) {
+    _houses = newInput;
+    submit();
   }
 
   Setting get setting => _setting;
 
+  set setting(Setting newInput) {
+    _setting = newInput;
+    submit();
+  }
+
   int get boardStock => _boardStock;
 
-  set boardStock(int point) {
-    _boardStock = point;
-    notifyListeners();
+  set boardStock(int newInput) {
+    _boardStock = newInput;
+    submit();
   }
 
   void reset() {
-    _player0.point = setting.defaultPoint;
-    _player1.point = setting.defaultPoint;
-    _player2.point = setting.defaultPoint;
-    _player3.point = setting.defaultPoint;
-    _boardStock = 0;
-    notifyListeners();
+    houses.reset(point: setting.defaultPoint);
+    submit();
   }
-
-  void submit() {
-    notifyListeners();
-  }
-}
-
-class SettingState extends ChangeNotifier {
-  Setting setting;
-
-  SettingState({this.setting});
 
   void submit() => notifyListeners();
+
+  void rotateHouse() {
+    houses.rotate();
+    submit();
+  }
 }
 
 class Setting {
@@ -84,47 +76,47 @@ class Setting {
 }
 
 class DragAndDropState extends ChangeNotifier {
-  bool isTargetPlayer0 = false;
-  bool isTargetPlayer1 = false;
-  bool isTargetPlayer2 = false;
-  bool isTargetPlayer3 = false;
+  bool playerTop = false;
+  bool playerLeft = false;
+  bool playerBottom = false;
+  bool playerRight = false;
 
-  void dragPlayer0() {
+  void dragPlayerTop() {
     disableAll();
-    isTargetPlayer0 = false;
+    playerTop = false;
     notifyListeners();
   }
 
-  void dragPlayer1() {
+  void dragPlayerLeft() {
     disableAll();
-    isTargetPlayer1 = false;
+    playerLeft = false;
     notifyListeners();
   }
 
-  void dragPlayer2() {
+  void dragPlayerBottom() {
     disableAll();
-    isTargetPlayer2 = false;
+    playerBottom = false;
     notifyListeners();
   }
 
-  void dragPlayer3() {
+  void dragPlayerRight() {
     disableAll();
-    isTargetPlayer3 = false;
+    playerRight = false;
     notifyListeners();
   }
 
   void disableAll() {
-    isTargetPlayer0 = true;
-    isTargetPlayer1 = true;
-    isTargetPlayer2 = true;
-    isTargetPlayer3 = true;
+    playerTop = true;
+    playerLeft = true;
+    playerBottom = true;
+    playerRight = true;
   }
 
   void reset() {
-    isTargetPlayer0 = false;
-    isTargetPlayer1 = false;
-    isTargetPlayer2 = false;
-    isTargetPlayer3 = false;
+    playerTop = false;
+    playerLeft = false;
+    playerBottom = false;
+    playerRight = false;
     notifyListeners();
   }
 }
