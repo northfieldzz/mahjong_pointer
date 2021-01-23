@@ -15,7 +15,7 @@ class PointSelector extends StatelessWidget {
 
   String get playerGrade => isHost ? '親' : '子';
 
-  String get finishMethod => isPicked ? 'ツモ' : '振り込み';
+  String get finishMethod => isPicked ? 'ツモ' : 'ロン';
 
   @override
   Widget build(BuildContext context) {
