@@ -1,122 +1,77 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/player/objects.dart';
-import 'package:mahjong_pointer/player/widget/index.dart';
+import 'setting/objects.dart';
+import 'setting/player/objects.dart';
 
-const defaultPoint = 25000;
+/// 1局
+class RoundGame {
+  int stockPoint;
+  Player playerTop;
+  Player playerLeft;
+  Player playerBottom;
+  Player playerRight;
 
-class GameState extends ChangeNotifier {
-  Houses _houses = Houses(
-    playerTop: EastHouse(
-      player: Player(
-        name: 'Player East',
-        point: defaultPoint,
-      ),
-    ),
-    playerLeft: SouthHouse(
-      player: Player(
-        name: 'Player South',
-        point: defaultPoint,
-      ),
-    ),
-    playerBottom: WestHouse(
-      player: Player(
-        name: 'Player West',
-        point: defaultPoint,
-      ),
-    ),
-    playerRight: NorthHouse(
-      player: Player(
-        name: 'Player North',
-        point: defaultPoint,
-      ),
-    ),
-  );
-
-  var _setting = Setting();
-  var _boardStock = 0;
-
-  Houses get houses => _houses;
-
-  set houses(Houses newInput) {
-    _houses = newInput;
-    submit();
+  RoundGame(Setting setting) {
+    stockPoint = 0;
+    playerTop = Player(
+      person: setting.persons[0],
+      initialPoint: setting.defaultPoint,
+      direction: Direction.East,
+    );
+    playerLeft = Player(
+      person: setting.persons[1],
+      initialPoint: setting.defaultPoint,
+      direction: Direction.South,
+    );
+    playerBottom = Player(
+      person: setting.persons[2],
+      initialPoint: setting.defaultPoint,
+      direction: Direction.West,
+    );
+    if (setting.persons.length == 4) {
+      playerRight = Player(
+        person: setting.persons[3],
+        initialPoint: setting.defaultPoint,
+        direction: Direction.North,
+      );
+    }
   }
 
-  Setting get setting => _setting;
-
-  set setting(Setting newInput) {
-    _setting = newInput;
-    submit();
+  void finish({Player winner, Player loser, int point}) {
+    if (loser == null) {
+      // 特定の振込者がいない　-> ツモ
+    } else {
+      // 特定の振込者がいる -> ロン
+    }
+    stockPoint = 0;
   }
 
-  int get boardStock => _boardStock;
-
-  set boardStock(int newInput) {
-    _boardStock = newInput;
-    submit();
-  }
-
-  void reset() {
-    houses.reset(point: setting.defaultPoint);
-    submit();
-  }
-
-  void submit() => notifyListeners();
-
-  void rotateHouse() {
-    houses.rotate();
-    submit();
-  }
+  void rotate() {}
 }
 
-class Setting {
-  int defaultPoint = 25000;
-}
+/// プレイヤー
+class Player {
+  Person person;
+  Direction direction;
+  int initialPoint;
+  List<int> scores = [];
+  bool isCall;
 
-class DragAndDropState extends ChangeNotifier {
-  bool playerTop = false;
-  bool playerLeft = false;
-  bool playerBottom = false;
-  bool playerRight = false;
+  Player({
+    this.person,
+    this.direction,
+    this.initialPoint,
+    this.isCall = false,
+  });
 
-  void dragPlayerTop() {
-    disableAll();
-    playerTop = false;
-    notifyListeners();
-  }
+  bool get isHost => direction == Direction.East;
 
-  void dragPlayerLeft() {
-    disableAll();
-    playerLeft = false;
-    notifyListeners();
-  }
+  bool get isPicked => direction == null;
 
-  void dragPlayerBottom() {
-    disableAll();
-    playerBottom = false;
-    notifyListeners();
-  }
-
-  void dragPlayerRight() {
-    disableAll();
-    playerRight = false;
-    notifyListeners();
-  }
-
-  void disableAll() {
-    playerTop = true;
-    playerLeft = true;
-    playerBottom = true;
-    playerRight = true;
-  }
-
-  void reset() {
-    playerTop = false;
-    playerLeft = false;
-    playerBottom = false;
-    playerRight = false;
-    notifyListeners();
+  int get point {
+    var _point = initialPoint;
+    scores.forEach((score) => _point += score);
+    if (isCall) {
+      _point -= 1000;
+    }
+    return _point;
   }
 }

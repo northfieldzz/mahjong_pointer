@@ -1,37 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-import '../objects.dart';
+import 'objects.dart';
+import 'player/pages.dart';
+import 'state.dart';
 
 class SettingsPage extends StatelessWidget {
   final Setting setting;
 
-  SettingsPage({this.setting});
+  SettingsPage(this.setting);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () => Navigator.pop(context, setting),
-        ),
-      ),
-      body: SettingsForm(setting: setting),
-      resizeToAvoidBottomPadding: false,
+    return ChangeNotifierProvider(
+      create: (_) => SettingsPageState(setting: setting),
+      builder: (context, child) {
+        final state = context.watch<SettingsPageState>();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Settings'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_outlined),
+              onPressed: () => Navigator.pop(context, state.setting),
+            ),
+          ),
+          body: Column(
+            children: [
+              DefaultPointInput(),
+              HomesForm(),
+            ],
+          ),
+          resizeToAvoidBottomPadding: false,
+        );
+      },
     );
   }
 }
 
-class SettingsForm extends StatelessWidget {
-  final Setting setting;
-
-  SettingsForm({this.setting});
-
+class DefaultPointInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final setting = context.select((SettingsPageState state) => state.setting);
     return Container(
       padding: EdgeInsets.all(20.0),
       child: Column(
