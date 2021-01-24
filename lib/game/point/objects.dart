@@ -1,113 +1,106 @@
 import 'dart:math';
 
-/// 固定値ポイント
-enum FixedPoint {
-  /// 満貫
-  Mangan,
+import 'enums.dart';
 
-  /// 跳満
-  Haneman,
-
-  /// 倍満
-  Baiman,
-
-  /// 三倍満
-  Sanbaiman,
-
-  /// 役満
-  Yakuman,
-}
-
-/// 満貫以上表示点数計算用列列挙拡張
-extension FixedPointExtension on FixedPoint {
-  static final points = <FixedPoint, int>{
-    FixedPoint.Mangan: 2000,
-    FixedPoint.Haneman: 3000,
-    FixedPoint.Baiman: 4000,
-    FixedPoint.Sanbaiman: 6000,
-    FixedPoint.Yakuman: 8000,
-  };
-
-  static final names = <FixedPoint, String>{
-    FixedPoint.Mangan: '満貫',
-    FixedPoint.Haneman: '跳満',
-    FixedPoint.Baiman: '倍満',
-    FixedPoint.Sanbaiman: '三倍満',
-    FixedPoint.Yakuman: '役満',
-  };
-
-  /// 点数
-  int get point => points[this];
-
-  /// 名前
-  String get name => names[this];
-}
-
-/// 支払う金額を計算する計算機
-class MahjongCalculator {
+class Score {
   /// 符
-  int hu;
+  final int hu;
 
   /// 翻
-  int fan;
+  final int fan;
 
-  MahjongCalculator({this.hu, this.fan});
+  /// 固定値上がり点
+  final FixedPoint fixedPoint;
+
+  /// 勝者が東家か
+  final bool isHost;
+
+  /// 上がり方がツモ
+  final bool isPicked;
+
+  Score({
+    this.hu,
+    this.fan,
+    this.fixedPoint,
+    this.isHost,
+    this.isPicked,
+  });
+
+  bool get isUniform => isHost;
 
   /// ベースとなる点数
   ///
   /// 符、翻から算出
-  int get basePoint {
-    if (hu != 20 && hu != 25) {
-      hu = (hu / 10).ceil() * 10;
+  num get basePoint {
+    if (fixedPoint != null) {
+      return fixedPoint.point;
     }
-    var point = hu * 4 * pow(2, fan);
-    if (200 >= point) {
+    var _hu = hu;
+
+    // 平和、七対子の符は切り上げを無視
+    if (_hu != 20 && _hu != 25) {
+      _hu = (_hu / 10).ceil() * 10;
+    }
+
+    // メインの点数計算式
+    var _point = _hu * 4 * pow(2, fan);
+
+    // 存在しない点数は無視
+    if (200 >= _point) {
       return null;
     }
-    if (point >= 2240) {
-      point = 2000;
+
+    // 満貫になる点数は満貫の固定値点数を与える
+    if (_point >= 2240) {
+      _point = FixedPoint.Mangan.point;
     }
+
+    // 翻で固定値点数になる場合は固定値点数に置き換える
     if (6 <= fan && fan <= 7) {
-      point = FixedPoint.Haneman.point;
+      _point = FixedPoint.Haneman.point;
     } else if (8 <= fan && fan <= 10) {
-      point = FixedPoint.Baiman.point;
+      _point = FixedPoint.Baiman.point;
     } else if (11 <= fan && fan <= 12) {
-      point = FixedPoint.Sanbaiman.point;
+      _point = FixedPoint.Sanbaiman.point;
     } else if (13 <= fan) {
-      point = FixedPoint.Yakuman.point;
+      _point = FixedPoint.Yakuman.point;
     }
-    return point.toInt();
+    return _point;
   }
 
-  /// ベースとなる点数からいくら支払う必要があるか計算する
-  static int calculate({
-    /// 上がった人が親か
-    bool isHostWithWinner,
+  /// 算出できない値か
+  bool get isEmpty => basePoint == null;
 
-    /// 支払う人が親か
-    bool isHostWithLoser = false,
+  /// ベースとなる点の子と親別の点数
+  num get _point => basePoint * (isHost ? 1.5 : 1);
 
-    /// 上がり方がツモか
-    bool isPicked,
+  /// 合計点数(切り上げ前)
+  num get sumPoint => _point * 4;
 
-    /// ベースとなる点数
-    num basePoint,
-  }) {
-    var point = basePoint;
-    if (point == null) {
-      return point;
-    }
-    point *= isHostWithWinner ? 1.5 : 1;
-    if (isPicked) {
-      if (isHostWithWinner) {
-        point = point * 4 / 3;
-      } else if (isHostWithLoser) {
-        point *= 2;
-      }
-    } else {
-      point *= 4;
-    }
-    point = (point / 100).ceil() * 100;
-    return point.toInt();
+  /// 合計点数(ロンのときの点数)
+  num get point => _ceil(sumPoint);
+
+  /// 親の受け取れる点数
+  int get hostPoint => payOtherPoint * 3;
+
+  /// 親の支払い点数(ツモのときの点数)
+  int get payHostPoint => _ceil(basePoint * 2);
+
+  /// 子の受け取れる点数
+  int get otherPoint => payOtherPoint * 2 + payHostPoint;
+
+  /// 子の支払い点数(ツモのときの点数)
+  int get payOtherPoint => _ceil(isHost ? sumPoint / 3 : _point);
+
+  /// 100点以下の点数はすべて切り上げする
+  int _ceil(num number) => (number / 100).ceil() * 100;
+
+  /// 表示用
+  String toString() {
+    var text = point.toString();
+    text += fixedPoint == null ? '' : ' (${fixedPoint.name})';
+    text += '\n${payOtherPoint.toString()}';
+    text += isUniform ? ' All' : '/${payHostPoint.toString()}';
+    return text;
   }
 }

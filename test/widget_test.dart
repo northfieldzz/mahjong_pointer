@@ -26,4 +26,9 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+
+  setUp(() {});
+  group('MahJang Point calculator test', () {
+    test('description', () {});
+  });
 }

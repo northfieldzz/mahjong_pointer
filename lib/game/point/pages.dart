@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'enums.dart';
 import 'objects.dart';
 
 class PointSelector extends StatelessWidget {
@@ -29,27 +30,14 @@ class PointSelector extends StatelessWidget {
             child: ListView.builder(
               itemCount: FixedPoint.values.length,
               itemBuilder: (context, i) {
-                final fixedPoint = FixedPoint.values[i];
-                var point = MahjongCalculator.calculate(
-                  isHostWithWinner: isHost,
+                final score = Score(
+                  fixedPoint: FixedPoint.values[i],
+                  isHost: isHost,
                   isPicked: isPicked,
-                  basePoint: fixedPoint.point,
                 );
-                var text = point.toString();
-                if (isPicked && isHost) {
-                  text += ' all';
-                } else if (isPicked && !isHost) {
-                  final lostPointToParent = MahjongCalculator.calculate(
-                    isHostWithWinner: isHost,
-                    isHostWithLoser: true,
-                    isPicked: isPicked,
-                    basePoint: point,
-                  );
-                  text += '/${lostPointToParent.toString()}';
-                }
                 return ListTile(
-                  title: Text('$text (${fixedPoint.name})'),
-                  onTap: () => Navigator.pop(context, point),
+                  title: Text(score.toString()),
+                  onTap: () => Navigator.pop(context, score),
                 );
               },
             ),
@@ -89,31 +77,18 @@ class MahjongPointTable extends StatelessWidget {
             children: [
               _buildBodyCell('$hu'),
               ...List.generate(fans.length, (index) {
-                final calculator = MahjongCalculator(hu: hu, fan: fans[index]);
-                final point = MahjongCalculator.calculate(
-                  isHostWithWinner: isHost,
+                final score = Score(
+                  hu: hu,
+                  fan: fans[index],
+                  isHost: isHost,
                   isPicked: isPicked,
-                  basePoint: calculator.basePoint,
                 );
-                if (point == null) {
+                if (score.isEmpty) {
                   return Container();
                 }
-                var text = point.toString();
-                if (isPicked && isHost) {
-                  text += ' all';
-                } else if (isPicked && !isHost) {
-                  final lostPointToParent = MahjongCalculator.calculate(
-                    isHostWithWinner: isHost,
-                    isHostWithLoser: true,
-                    isPicked: isPicked,
-                    basePoint: calculator.basePoint,
-                  );
-                  text += '/${lostPointToParent.toString()}';
-                }
-
                 return PointCell(
-                  point: point,
-                  child: _buildBodyCell(text),
+                  score: score,
+                  child: _buildBodyCell(score.toString()),
                 );
               }),
             ],
@@ -140,15 +115,15 @@ class MahjongPointTable extends StatelessWidget {
 
 class PointCell extends StatelessWidget {
   final Widget child;
-  final int point;
+  final Score score;
 
-  PointCell({@required this.child, this.point});
+  PointCell({@required this.child, this.score});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: child,
-      onTap: () => Navigator.pop(context, point),
+      onTap: () => Navigator.pop(context, score),
     );
   }
 }

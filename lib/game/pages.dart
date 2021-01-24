@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mahjong_pointer/game/point/objects.dart';
+import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'objects.dart';
@@ -8,17 +10,6 @@ import 'point/widgets.dart';
 import 'setting/objects.dart';
 import 'setting/player/objects.dart';
 import 'state.dart';
-
-class GamePageState extends ChangeNotifier {
-  RoundGame game;
-
-  void reach(int point) {
-    game.stockPoint += point;
-    notifyListeners();
-  }
-
-  GamePageState(this.game);
-}
 
 /// ゲーム画面
 class GamePage extends StatelessWidget {
@@ -31,9 +22,7 @@ class GamePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => GamePageState(RoundGame(setting)),
-        ),
+        ChangeNotifierProvider(create: (_) => GamePageState(setting)),
       ],
       builder: (context, child) {
         return WillPopScope(
@@ -79,7 +68,7 @@ class PointWidget extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               HouseWidget(
-                player: gameState.game.playerTop,
+                player: gameState.playerTop,
                 isReceive: dragState.playerTop,
                 onDragStarted: dragState.dragPlayerTop,
                 onDragEnd: (_) => dragState.reset(),
@@ -88,7 +77,7 @@ class PointWidget extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: HouseWidget(
-                      player: gameState.game.playerLeft,
+                      player: gameState.playerLeft,
                       isReceive: dragState.playerLeft,
                       onDragStarted: dragState.dragPlayerLeft,
                       onDragEnd: (_) => dragState.reset(),
@@ -134,7 +123,7 @@ class PointWidget extends StatelessWidget {
                   ),
                   Expanded(
                     child: HouseWidget(
-                      player: gameState.game.playerRight,
+                      player: gameState.playerRight,
                       isReceive: dragState.playerRight,
                       onDragStarted: dragState.dragPlayerRight,
                       onDragEnd: (_) => dragState.reset(),
@@ -143,7 +132,7 @@ class PointWidget extends StatelessWidget {
                 ],
               ),
               HouseWidget(
-                player: gameState.game.playerBottom,
+                player: gameState.playerBottom,
                 isReceive: dragState.playerBottom,
                 onDragStarted: dragState.dragPlayerBottom,
                 onDragEnd: (_) => dragState.reset(),
@@ -181,7 +170,7 @@ class HouseWidget extends StatelessWidget {
                 child: Icon(Icons.face_retouching_natural, size: 90),
                 onAccept: (debtor) async {
                   // 点数計算
-                  final point = await Navigator.push<int>(
+                  final score = await Navigator.push<Score>(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PointSelector(
@@ -190,15 +179,16 @@ class HouseWidget extends StatelessWidget {
                       ),
                     ),
                   );
-                  if (point == null) {
+                  if (score == null) {
                     return null;
                   }
-                  gameState.game.finish(
+                  gameState.finish(
                     winner: player,
                     loser: debtor,
-                    point: point,
+                    score: score,
+                    isPicked: debtor.isPicked,
                   );
-                  gameState.game.rotate();
+                  gameState.rotate();
                 },
               )
             : DebtorWidget(

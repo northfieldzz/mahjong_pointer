@@ -10,8 +10,24 @@ class IndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Game')),
-      body: Container(child: GameWidget()),
+      body: Column(
+        children: [
+          GameTitleWidget(),
+          GameWidget(),
+        ],
+      ),
+    );
+  }
+}
+
+class GameTitleWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Image(
+        image: NetworkImage(
+            'https://4.bp.blogspot.com/-hlZSdtrebeU/WQA-FXkdZ5I/AAAAAAABD5A/Z9MR7EaB-48uJplYBSEOKrUmo-LN6cP6QCLcB/s800/ma-jan_ojisan.png'),
+      ),
     );
   }
 }
