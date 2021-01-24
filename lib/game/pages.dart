@@ -176,6 +176,7 @@ class HouseWidget extends StatelessWidget {
                       builder: (context) => PointSelector(
                         isHost: player.isHost,
                         isPicked: debtor.isPicked,
+                        noMoreReaderCount: gameState.noMoreReaderCount,
                       ),
                     ),
                   );
@@ -188,7 +189,9 @@ class HouseWidget extends StatelessWidget {
                     score: score,
                     isPicked: debtor.isPicked,
                   );
-                  gameState.rotate();
+                  if (player != gameState.eastPlayer) {
+                    gameState.rotate();
+                  }
                 },
               )
             : DebtorWidget(

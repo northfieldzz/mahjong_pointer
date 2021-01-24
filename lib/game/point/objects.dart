@@ -18,12 +18,15 @@ class Score {
   /// 上がり方がツモ
   final bool isPicked;
 
+  final int noMoreReaderCount;
+
   Score({
     this.hu,
     this.fan,
     this.fixedPoint,
     this.isHost,
     this.isPicked,
+    this.noMoreReaderCount,
   });
 
   bool get isUniform => isHost;
@@ -81,16 +84,20 @@ class Score {
   num get point => _ceil(sumPoint);
 
   /// 親の受け取れる点数
-  int get hostPoint => payOtherPoint * 3;
+  int get hostPoint => payOtherPoint * 3 + (300 * noMoreReaderCount);
 
   /// 親の支払い点数(ツモのときの点数)
-  int get payHostPoint => _ceil(basePoint * 2);
+  int get payHostPoint => _ceil(basePoint * 2) + (100 * noMoreReaderCount);
 
   /// 子の受け取れる点数
-  int get otherPoint => payOtherPoint * 2 + payHostPoint;
+  int get otherPoint {
+    return payOtherPoint * 2 + payHostPoint + (300 * noMoreReaderCount);
+  }
 
   /// 子の支払い点数(ツモのときの点数)
-  int get payOtherPoint => _ceil(isHost ? sumPoint / 3 : _point);
+  int get payOtherPoint {
+    return _ceil(isHost ? sumPoint / 3 : _point) + (100 * noMoreReaderCount);
+  }
 
   /// 100点以下の点数はすべて切り上げする
   int _ceil(num number) => (number / 100).ceil() * 100;

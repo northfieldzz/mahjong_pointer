@@ -62,9 +62,8 @@ class Player {
     // リーチ棒の処理
     if (winner == this) {
       _point += stockPoint;
-    } else {
-      _point -= isCall ? 1000 : 0;
     }
+    _point -= isCall ? 1000 : 0;
     isCall = false;
     _points.add(_point);
   }

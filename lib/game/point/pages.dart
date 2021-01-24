@@ -8,11 +8,16 @@ import 'objects.dart';
 class PointSelector extends StatelessWidget {
   final bool isHost;
   final bool isPicked;
+  final int noMoreReaderCount;
   final List<int> hus = [20, 25, 30, 40, 50, 60, 70];
   final List<int> hons = [1, 2, 3, 4];
   final List<int> specialHans = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
-  PointSelector({this.isHost, this.isPicked});
+  PointSelector({
+    this.isHost,
+    this.isPicked,
+    this.noMoreReaderCount,
+  });
 
   String get playerGrade => isHost ? '親' : '子';
 
@@ -25,7 +30,11 @@ class PointSelector extends StatelessWidget {
       body: Column(
         children: [
           Text('$playerGrade  $finishMethod'),
-          MahjongPointTable(isHost: isHost, isPicked: isPicked),
+          MahjongPointTable(
+            isHost: isHost,
+            isPicked: isPicked,
+            noMoreReaderCount: noMoreReaderCount,
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: FixedPoint.values.length,
@@ -34,6 +43,7 @@ class PointSelector extends StatelessWidget {
                   fixedPoint: FixedPoint.values[i],
                   isHost: isHost,
                   isPicked: isPicked,
+                  noMoreReaderCount: noMoreReaderCount,
                 );
                 return ListTile(
                   title: Text(score.toString()),
@@ -51,11 +61,16 @@ class PointSelector extends StatelessWidget {
 class MahjongPointTable extends StatelessWidget {
   final bool isHost;
   final bool isPicked;
+  final int noMoreReaderCount;
   final List<int> hus = [20, 25, 30, 40, 50, 60, 70];
   final List<int> fans = [1, 2, 3, 4];
   final List<int> specialHans = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 
-  MahjongPointTable({this.isHost, this.isPicked});
+  MahjongPointTable({
+    this.isHost,
+    this.isPicked,
+    this.noMoreReaderCount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +97,7 @@ class MahjongPointTable extends StatelessWidget {
                   fan: fans[index],
                   isHost: isHost,
                   isPicked: isPicked,
+                  noMoreReaderCount: noMoreReaderCount,
                 );
                 if (score.isEmpty) {
                   return Container();

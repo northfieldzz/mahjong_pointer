@@ -12,9 +12,11 @@ class GamePageState extends ChangeNotifier {
   Player playerLeft;
   Player playerBottom;
   Player playerRight;
+  int noMoreReaderCount;
 
   GamePageState(Setting setting) {
     stockPoint = 0;
+    noMoreReaderCount = 0;
     playerTop = Player(
       person: setting.persons[0],
       initialPoint: setting.defaultPoint,
@@ -37,6 +39,10 @@ class GamePageState extends ChangeNotifier {
         direction: Direction.North,
       );
     }
+  }
+
+  List<Player> get players {
+    return [playerTop, playerLeft, playerBottom, playerRight];
   }
 
   void finish({
@@ -78,6 +84,12 @@ class GamePageState extends ChangeNotifier {
   }
 
   void rotate() {
+    var temp = playerRight.direction;
+    playerRight.direction = playerBottom.direction;
+    playerBottom.direction = playerLeft.direction;
+    playerLeft.direction = playerTop.direction;
+    playerTop.direction = temp;
+    noMoreReaderCount = 0;
     notifyListeners();
   }
 
@@ -85,6 +97,8 @@ class GamePageState extends ChangeNotifier {
     stockPoint += point;
     notifyListeners();
   }
+
+  Player get eastPlayer => players.firstWhere((player) => player.isHost);
 }
 
 class DropTargetState extends ChangeNotifier {
