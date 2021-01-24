@@ -1,6 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class ThemeContainer extends StatelessWidget {
+  final Widget child;
+
+  ThemeContainer({this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(20.0),
+      child: child,
+    );
+  }
+}
+
 class ConfirmDialog extends StatelessWidget {
   final String title;
   final String text;

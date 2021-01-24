@@ -5,16 +5,22 @@ import 'package:provider/provider.dart';
 import 'game/pages.dart';
 import 'game/setting/pages.dart';
 import 'state.dart';
+import 'widgets.dart';
 
 class IndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          GameTitleWidget(),
-          GameWidget(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: ThemeContainer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GameTitleWidget(),
+              GameWidget(),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -26,7 +32,8 @@ class GameTitleWidget extends StatelessWidget {
     return Container(
       child: Image(
         image: NetworkImage(
-            'https://4.bp.blogspot.com/-hlZSdtrebeU/WQA-FXkdZ5I/AAAAAAABD5A/Z9MR7EaB-48uJplYBSEOKrUmo-LN6cP6QCLcB/s800/ma-jan_ojisan.png'),
+          'https://4.bp.blogspot.com/-hlZSdtrebeU/WQA-FXkdZ5I/AAAAAAABD5A/Z9MR7EaB-48uJplYBSEOKrUmo-LN6cP6QCLcB/s800/ma-jan_ojisan.png',
+        ),
       ),
     );
   }
@@ -41,7 +48,7 @@ class GameWidget extends StatelessWidget {
         final state = context.watch<GameWidgetState>();
         return Column(
           children: [
-            RaisedButton(
+            IndexRaisedButton(
               child: Text('One Round Game Start'),
               onPressed: () => Navigator.push(
                 context,
@@ -52,7 +59,7 @@ class GameWidget extends StatelessWidget {
                 ),
               ),
             ),
-            RaisedButton(
+            IndexRaisedButton(
               child: Text('Half Round Game Start'),
               onPressed: () => Navigator.push(
                 context,
@@ -64,7 +71,7 @@ class GameWidget extends StatelessWidget {
                 ),
               ),
             ),
-            RaisedButton(
+            IndexRaisedButton(
               child: Text('Setting'),
               onPressed: () async => state.setSetting(
                 await Navigator.push(
@@ -78,6 +85,24 @@ class GameWidget extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class IndexRaisedButton extends StatelessWidget {
+  final Widget child;
+  final VoidCallback onPressed;
+
+  IndexRaisedButton({this.child, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonTheme(
+      minWidth: 300.0,
+      child: RaisedButton(
+        child: child,
+        onPressed: onPressed,
+      ),
     );
   }
 }

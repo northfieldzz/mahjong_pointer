@@ -20,10 +20,8 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => GamePageState(setting)),
-      ],
+    return ChangeNotifierProvider(
+      create: (_) => GamePageState(setting),
       builder: (context, child) {
         return WillPopScope(
           onWillPop: () async => await showDialog(
@@ -72,6 +70,7 @@ class PointWidget extends StatelessWidget {
                 isReceive: dragState.playerTop,
                 onDragStarted: dragState.dragPlayerTop,
                 onDragEnd: (_) => dragState.reset(),
+                quarterTurns: 2,
               ),
               Row(
                 children: <Widget>[
@@ -81,6 +80,7 @@ class PointWidget extends StatelessWidget {
                       isReceive: dragState.playerLeft,
                       onDragStarted: dragState.dragPlayerLeft,
                       onDragEnd: (_) => dragState.reset(),
+                      quarterTurns: 1,
                     ),
                   ),
                   ConstrainedBox(
@@ -127,6 +127,7 @@ class PointWidget extends StatelessWidget {
                       isReceive: dragState.playerRight,
                       onDragStarted: dragState.dragPlayerRight,
                       onDragEnd: (_) => dragState.reset(),
+                      quarterTurns: 3,
                     ),
                   )
                 ],
@@ -150,58 +151,63 @@ class HouseWidget extends StatelessWidget {
   final bool isReceive;
   final VoidCallback onDragStarted;
   final Function(Player) onDragEnd;
+  final int quarterTurns;
 
   HouseWidget({
     @required this.player,
     this.isReceive = false,
     @required this.onDragStarted,
     @required this.onDragEnd,
+    this.quarterTurns = 0,
   });
 
   @override
   Widget build(BuildContext context) {
     final gameState = context.watch<GamePageState>();
-    return Column(
-      children: <Widget>[
-        Text('${player.direction.display}家'),
-        Text(player.person.name),
-        isReceive
-            ? CreditorWidget(
-                child: Icon(Icons.face_retouching_natural, size: 90),
-                onAccept: (debtor) async {
-                  // 点数計算
-                  final score = await Navigator.push<Score>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PointSelector(
-                        isHost: player.isHost,
-                        isPicked: debtor.isPicked,
-                        noMoreReaderCount: gameState.noMoreReaderCount,
+    return RotatedBox(
+      quarterTurns: quarterTurns,
+      child: Column(
+        children: <Widget>[
+          Text('${player.direction.display}家'),
+          Text(player.person.name),
+          isReceive
+              ? CreditorWidget(
+                  child: Icon(Icons.face_retouching_natural, size: 60),
+                  onAccept: (debtor) async {
+                    // 点数計算
+                    final score = await Navigator.push<Score>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PointSelector(
+                          isHost: player.isHost,
+                          isPicked: debtor.isPicked,
+                          noMoreReaderCount: gameState.noMoreReaderCount,
+                        ),
                       ),
-                    ),
-                  );
-                  if (score == null) {
-                    return null;
-                  }
-                  gameState.finish(
-                    winner: player,
-                    loser: debtor,
-                    score: score,
-                    isPicked: debtor.isPicked,
-                  );
-                  if (player != gameState.eastPlayer) {
-                    gameState.rotate();
-                  }
-                },
-              )
-            : DebtorWidget(
-                debtor: player,
-                child: Icon(Icons.person_sharp, size: 90),
-                onDragStarted: onDragStarted,
-                onDragEnd: onDragEnd,
-              ),
-        Text(player.point.toString()),
-      ],
+                    );
+                    if (score == null) {
+                      return null;
+                    }
+                    gameState.finish(
+                      winner: player,
+                      loser: debtor,
+                      score: score,
+                      isPicked: debtor.isPicked,
+                    );
+                    if (player != gameState.eastPlayer) {
+                      gameState.rotate();
+                    }
+                  },
+                )
+              : DebtorWidget(
+                  debtor: player,
+                  child: Icon(Icons.person_sharp, size: 60),
+                  onDragStarted: onDragStarted,
+                  onDragEnd: onDragEnd,
+                ),
+          Text(player.point.toString()),
+        ],
+      ),
     );
   }
 }

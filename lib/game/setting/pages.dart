@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'objects.dart';
@@ -26,11 +27,13 @@ class SettingsPage extends StatelessWidget {
               onPressed: () => Navigator.pop(context, state.setting),
             ),
           ),
-          body: Column(
-            children: [
-              DefaultPointInput(),
-              HomesForm(),
-            ],
+          body: ThemeContainer(
+            child: Column(
+              children: [
+                DefaultPointInput(),
+                HomesForm(),
+              ],
+            ),
           ),
           resizeToAvoidBottomPadding: false,
         );
@@ -43,29 +46,26 @@ class DefaultPointInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final setting = context.select((SettingsPageState state) => state.setting);
-    return Container(
-      padding: EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
-          TextField(
-            controller: TextEditingController(
-              text: setting.defaultPoint.toString(),
-            ),
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            decoration: const InputDecoration(
-              labelText: 'default point',
-              hintText: 'enter default point',
-            ),
-            onChanged: (point) {
-              if (point.isEmpty) point = '0';
-              setting.defaultPoint = int.parse(point);
-            },
+    return Column(
+      children: <Widget>[
+        TextField(
+          controller: TextEditingController(
+            text: setting.defaultPoint.toString(),
           ),
-        ],
-      ),
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: const InputDecoration(
+            labelText: 'default point',
+            hintText: 'enter default point',
+          ),
+          onChanged: (point) {
+            if (point.isEmpty) point = '0';
+            setting.defaultPoint = int.parse(point);
+          },
+        ),
+      ],
     );
   }
 }

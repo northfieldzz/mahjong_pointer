@@ -29,8 +29,8 @@ class DebtorWidget extends StatelessWidget {
       onDragEnd: (value) => onDragEnd(debtor),
       onDraggableCanceled: (velocity, offset) => onDragEnd(debtor),
       onDragCompleted: () => onDragEnd(debtor),
-      feedback: Icon(Icons.money, size: 90),
-      childWhenDragging: draggingChild ?? Icon(Icons.mood_bad, size: 90),
+      feedback: Icon(Icons.money, size: 60),
+      childWhenDragging: draggingChild ?? Icon(Icons.mood_bad, size: 60),
     );
   }
 }
