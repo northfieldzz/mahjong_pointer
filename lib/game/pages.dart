@@ -4,6 +4,7 @@ import 'package:mahjong_pointer/game/point/objects.dart';
 import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
+import 'board/pages.dart';
 import 'objects.dart';
 import 'point/pages.dart';
 import 'point/widgets.dart';
@@ -33,7 +34,18 @@ class GamePage extends StatelessWidget {
             ),
           ),
           child: Scaffold(
-            appBar: AppBar(title: Text('Game')),
+            appBar: AppBar(
+              title: Text('Game'),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.score),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => ScoreBoard()),
+                  ),
+                )
+              ],
+            ),
             body: child,
           ),
         );
@@ -196,8 +208,9 @@ class HouseWidget extends StatelessWidget {
                     );
                     if (player != gameState.eastPlayer) {
                       gameState.rotate();
+                    } else {
+                      gameState.noMoreReader();
                     }
-                    gameState.noMoreReader();
                   },
                 )
               : DebtorWidget(
