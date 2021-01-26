@@ -99,6 +99,11 @@ class GamePageState extends ChangeNotifier {
   }
 
   Player get eastPlayer => players.firstWhere((player) => player.isHost);
+
+  void noMoreReader() {
+    noMoreReaderCount += 1;
+    notifyListeners();
+  }
 }
 
 class DropTargetState extends ChangeNotifier {

@@ -197,6 +197,7 @@ class HouseWidget extends StatelessWidget {
                     if (player != gameState.eastPlayer) {
                       gameState.rotate();
                     }
+                    gameState.noMoreReader();
                   },
                 )
               : DebtorWidget(
