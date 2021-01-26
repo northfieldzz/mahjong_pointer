@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'enums.dart';
 import 'objects.dart';
 
 class PointSelector extends StatelessWidget {
@@ -37,10 +35,10 @@ class PointSelector extends StatelessWidget {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: FixedPoint.values.length,
+              itemCount: FixedPointType.values.length,
               itemBuilder: (context, i) {
                 final score = Score(
-                  fixedPoint: FixedPoint.values[i],
+                  abstractPoint: FixedPointType.values[i].detail,
                   isHost: isHost,
                   isPicked: isPicked,
                   noMoreReaderCount: noMoreReaderCount,
@@ -93,18 +91,17 @@ class MahjongPointTable extends StatelessWidget {
               _buildBodyCell('$hu'),
               ...List.generate(fans.length, (index) {
                 final score = Score(
-                  hu: hu,
-                  fan: fans[index],
+                  abstractPoint: BasePoint(hu: hu, fan: fans[index]),
                   isHost: isHost,
                   isPicked: isPicked,
                   noMoreReaderCount: noMoreReaderCount,
                 );
-                if (score.isEmpty) {
+                if (score.isNotDisplay) {
                   return Container();
                 }
-                return PointCell(
-                  score: score,
+                return GestureDetector(
                   child: _buildBodyCell(score.toString()),
+                  onTap: () => Navigator.pop(context, score),
                 );
               }),
             ],
@@ -125,21 +122,6 @@ class MahjongPointTable extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Center(child: Text(label, textAlign: TextAlign.center)),
-    );
-  }
-}
-
-class PointCell extends StatelessWidget {
-  final Widget child;
-  final Score score;
-
-  PointCell({@required this.child, this.score});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: child,
-      onTap: () => Navigator.pop(context, score),
     );
   }
 }
