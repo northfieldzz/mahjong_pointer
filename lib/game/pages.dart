@@ -114,6 +114,8 @@ class PointWidget extends StatelessWidget {
                                 );
                                 if (isOk) {
                                   gameState.reach(reachPoint);
+                                  constratins:
+                                  BoxConstraints.loose(Size(10.0, 10.0));
                                   debtor.isCall = true;
                                 }
                               }
@@ -182,43 +184,45 @@ class HouseWidget extends StatelessWidget {
         children: <Widget>[
           Text('${player.direction.display}家'),
           Text(player.person.name),
-          isReceive
-              ? CreditorWidget(
-                  child: Icon(Icons.face_retouching_natural, size: 60),
-                  onAccept: (debtor) async {
-                    // 点数計算
-                    final score = await Navigator.push<Score>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PointSelector(
-                          isHost: player.isHost,
+          Container(
+              color: player.isCall ? Colors.green : Colors.white,
+              child: isReceive
+                  ? CreditorWidget(
+                      child: Icon(Icons.face_retouching_natural, size: 60),
+                      onAccept: (debtor) async {
+                        // 点数計算
+                        final score = await Navigator.push<Score>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PointSelector(
+                              isHost: player.isHost,
+                              isPicked: debtor.isPicked,
+                              noMoreReaderCount: gameState.noMoreReaderCount,
+                            ),
+                          ),
+                        );
+                        if (score == null) {
+                          return null;
+                        }
+                        gameState.finish(
+                          winner: player,
+                          loser: debtor,
+                          score: score,
                           isPicked: debtor.isPicked,
-                          noMoreReaderCount: gameState.noMoreReaderCount,
-                        ),
-                      ),
-                    );
-                    if (score == null) {
-                      return null;
-                    }
-                    gameState.finish(
-                      winner: player,
-                      loser: debtor,
-                      score: score,
-                      isPicked: debtor.isPicked,
-                    );
-                    if (player != gameState.eastPlayer) {
-                      gameState.rotate();
-                    } else {
-                      gameState.noMoreReader();
-                    }
-                  },
-                )
-              : DebtorWidget(
-                  debtor: player,
-                  child: Icon(Icons.person_sharp, size: 60),
-                  onDragStarted: onDragStarted,
-                  onDragEnd: onDragEnd,
-                ),
+                        );
+                        if (player != gameState.eastPlayer) {
+                          gameState.rotate();
+                        } else {
+                          gameState.noMoreReader();
+                        }
+                      },
+                    )
+                  : DebtorWidget(
+                      debtor: player,
+                      child: Icon(Icons.person_sharp, size: 60),
+                      onDragStarted: onDragStarted,
+                      onDragEnd: onDragEnd,
+                    )),
           Text(player.point.toString()),
         ],
       ),
