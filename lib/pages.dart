@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'game/pages.dart';
-import 'game/setting/pages.dart';
 import 'state.dart';
 import 'tembow.dart';
 import 'widgets.dart';
@@ -46,7 +45,7 @@ class IndexPage extends StatelessWidget {
                 ],
               ),
             ),
-          ], // backgroundColor: Color(0xFFBEEDED),
+          ],
         ),
       ),
     );
@@ -92,9 +91,9 @@ class GameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => GameWidgetState(),
+      create: (_) => MahjongPointerAppState(),
       builder: (context, child) {
-        final state = context.watch<GameWidgetState>();
+        final state = context.watch<MahjongPointerAppState>();
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -123,19 +122,7 @@ class GameWidget extends StatelessWidget {
                 ),
               ),
             ),
-            // IndexRaisedButton(
-            //   child: Text('Setting'),
-            //   onPressed: () async => state.setSetting(
-            //     await Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => SettingsPage(state.setting),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             IndexFlatButton(
-              // color: Colors.white,
               child:
                   Text('Tutorial', style: TextStyle(color: Color(0xFF4A967F))),
               onPressed: () async {

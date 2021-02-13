@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/game/point/objects.dart';
 
-import 'objects.dart';
-import 'setting/objects.dart';
-import 'setting/player/objects.dart';
+import 'player/objects.dart';
+import 'player/point/score.dart';
+import 'setting.dart';
 
 class GamePageState extends ChangeNotifier {
   int stockPoint;
@@ -14,31 +13,37 @@ class GamePageState extends ChangeNotifier {
   Player playerRight;
   int noMoreReaderCount;
 
-  GamePageState(Setting setting) {
-    stockPoint = 0;
-    noMoreReaderCount = 0;
-    playerTop = Player(
-      person: setting.persons[0],
-      initialPoint: setting.defaultPoint,
-      direction: Direction.East,
-    );
-    playerLeft = Player(
-      person: setting.persons[1],
-      initialPoint: setting.defaultPoint,
-      direction: Direction.South,
-    );
-    playerBottom = Player(
-      person: setting.persons[2],
-      initialPoint: setting.defaultPoint,
-      direction: Direction.West,
-    );
-    if (setting.persons.length == 4) {
-      playerRight = Player(
-        person: setting.persons[3],
-        initialPoint: setting.defaultPoint,
-        direction: Direction.North,
-      );
-    }
+  GamePageState(
+    Setting setting, {
+    Player personEast,
+    Player personSouth,
+    Player personWest,
+    Player personNorth,
+  }) {
+    // stockPoint = 0;
+    // noMoreReaderCount = 0;
+    // playerTop = Player(
+    //   person: personEast,
+    //   initialPoint: setting.defaultPoint,
+    //   direction: Direction.East,
+    // );
+    // playerLeft = Player(
+    //   person: personSouth,
+    //   initialPoint: setting.defaultPoint,
+    //   direction: Direction.South,
+    // );
+    // playerBottom = Player(
+    //   person: personWest,
+    //   initialPoint: setting.defaultPoint,
+    //   direction: Direction.West,
+    // );
+    // if (personNorth == null) {
+    //   playerRight = Player(
+    //     person: personNorth,
+    //     initialPoint: setting.defaultPoint,
+    //     direction: Direction.North,
+    //   );
+    // }
   }
 
   List<Player> get players {

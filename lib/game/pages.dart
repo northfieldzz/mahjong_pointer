@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/game/point/objects.dart';
 import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'board/pages.dart';
-import 'objects.dart';
-import 'point/pages.dart';
-import 'point/widgets.dart';
-import 'setting/objects.dart';
-import 'setting/player/objects.dart';
+import 'player/board/pages.dart';
+import 'player/objects.dart';
+import 'player/point/pages.dart';
+import 'player/point/score.dart';
+import 'player/widgets.dart';
+import 'setting.dart';
 import 'state.dart';
 
 /// ゲーム画面
@@ -182,46 +181,47 @@ class HouseWidget extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text('${player.direction.display}家'),
-          Text(player.person.name),
+          Text(player.name),
           Container(
-              color: player.isCall ? Colors.green : Colors.white,
-              child: isReceive
-                  ? CreditorWidget(
-                      child: Icon(Icons.face_retouching_natural, size: 60),
-                      onAccept: (debtor) async {
-                        // 点数計算
-                        final score = await Navigator.push<Score>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PointSelector(
-                              isHost: player.isHost,
-                              isPicked: debtor.isPicked,
-                              noMoreReaderCount: gameState.noMoreReaderCount,
-                            ),
+            color: player.isCall ? Colors.green : Colors.white,
+            child: isReceive
+                ? CreditorWidget(
+                    child: Icon(Icons.face_retouching_natural, size: 60),
+                    onAccept: (debtor) async {
+                      // 点数計算
+                      final score = await Navigator.push<Score>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PointSelector(
+                            isHost: player.isHost,
+                            isPicked: debtor.isPicked,
+                            noMoreReaderCount: gameState.noMoreReaderCount,
                           ),
-                        );
-                        if (score == null) {
-                          return null;
-                        }
-                        gameState.finish(
-                          winner: player,
-                          loser: debtor,
-                          score: score,
-                          isPicked: debtor.isPicked,
-                        );
-                        if (player != gameState.eastPlayer) {
-                          gameState.rotate();
-                        } else {
-                          gameState.noMoreReader();
-                        }
-                      },
-                    )
-                  : DebtorWidget(
-                      debtor: player,
-                      child: Icon(Icons.person_sharp, size: 60),
-                      onDragStarted: onDragStarted,
-                      onDragEnd: onDragEnd,
-                    )),
+                        ),
+                      );
+                      if (score == null) {
+                        return null;
+                      }
+                      gameState.finish(
+                        winner: player,
+                        loser: debtor,
+                        score: score,
+                        isPicked: debtor.isPicked,
+                      );
+                      if (player != gameState.eastPlayer) {
+                        gameState.rotate();
+                      } else {
+                        gameState.noMoreReader();
+                      }
+                    },
+                  )
+                : DebtorWidget(
+                    debtor: player,
+                    child: Icon(Icons.person_sharp, size: 60),
+                    onDragStarted: onDragStarted,
+                    onDragEnd: onDragEnd,
+                  ),
+          ),
           Text(player.point.toString()),
         ],
       ),

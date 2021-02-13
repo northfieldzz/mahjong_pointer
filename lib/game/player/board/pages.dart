@@ -52,10 +52,10 @@ class ScoreBoardEachGame extends StatelessWidget {
         children: [
           TableRow(children: [
             _buildHeaderCell('ゲーム数/プレイヤー名'),
-            _buildHeaderCell(playerTop.person.name),
-            _buildHeaderCell(playerLeft.person.name),
-            _buildHeaderCell(playerBottom.person.name),
-            _buildHeaderCell(playerRight.person.name),
+            _buildHeaderCell(playerTop.name),
+            _buildHeaderCell(playerLeft.name),
+            _buildHeaderCell(playerBottom.name),
+            _buildHeaderCell(playerRight.name),
           ])
         ],
       ),

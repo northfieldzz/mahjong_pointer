@@ -1,25 +1,48 @@
-import 'point/objects.dart';
-import 'setting/player/objects.dart';
+import 'point/score.dart';
+
+/// 方角
+enum Direction {
+  /// 東
+  East,
+
+  /// 南
+  South,
+
+  /// 西
+  West,
+
+  /// 北
+  North,
+}
+
+extension DirectionExtension on Direction {
+  static const displays = <Direction, String>{
+    Direction.East: '東',
+    Direction.South: '南',
+    Direction.West: '西',
+    Direction.North: '北'
+  };
+
+  /// 表示名
+  String get display => displays[this];
+}
 
 /// プレイヤー
 class Player {
-  Person person;
+  String name;
   Direction direction;
   int initialPoint;
   List<int> _points = [];
   bool isCall;
 
   Player({
-    this.person,
+    this.name,
     this.direction,
     this.initialPoint,
     this.isCall = false,
   });
-
   bool get isHost => direction == Direction.East;
-
   bool get isPicked => direction == null;
-
   int get point {
     var _point = initialPoint;
     _points.forEach((score) => _point += score);
@@ -30,7 +53,6 @@ class Player {
   }
 
   List<int> get scores => _points;
-
   void registerPoints({
     Score score,
     Player winner,
@@ -58,7 +80,6 @@ class Player {
         _point = -score.point;
       }
     }
-
     // リーチ棒の処理
     if (winner == this) {
       _point += stockPoint;
