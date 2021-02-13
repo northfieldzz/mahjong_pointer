@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 import 'game/pages.dart';
 import 'game/setting/pages.dart';
 import 'state.dart';
@@ -16,6 +15,7 @@ class IndexPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Stack(
+          alignment: Alignment.center,
           children: [
             Tembow(),
             ThemeContainer(
@@ -93,7 +93,8 @@ class GameWidget extends StatelessWidget {
             IndexRaisedButton(
               child: Text('Tutorial'),
               onPressed: () async {
-                if (await canLaunch("https://www.youtube.com/watch?v=C4YfppkXhfM")) {
+                if (await canLaunch(
+                    "https://www.youtube.com/watch?v=C4YfppkXhfM")) {
                   await launch("https://www.youtube.com/watch?v=C4YfppkXhfM");
                 }
               },
