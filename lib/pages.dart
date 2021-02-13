@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'game/pages.dart';
 import 'game/setting/pages.dart';
 import 'state.dart';
+import 'tembow.dart';
 import 'widgets.dart';
 
 class IndexPage extends StatelessWidget {
@@ -14,14 +15,19 @@ class IndexPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: ThemeContainer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GameTitleWidget(),
-              GameWidget(),
-            ],
-          ),
+        body: Stack(
+          children: [
+            Tembow(),
+            ThemeContainer(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GameTitleWidget(),
+                  GameWidget(),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

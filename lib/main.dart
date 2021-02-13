@@ -11,8 +11,15 @@ class MahjongPointerApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mahjong Pointer',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
+        primaryColor: Color.fromARGB(255, 190, 237, 237),
+        accentColor: Color.fromARGB(255, 250, 248, 159),
+        scaffoldBackgroundColor: Color.fromARGB(255, 190, 237, 237),
+        iconTheme: const IconThemeData.fallback().copyWith(
+          color: Color.fromARGB(255, 74, 150, 127),
+        ),
       ),
+      darkTheme: ThemeData.dark(),
       home: IndexPage(),
     );
   }
