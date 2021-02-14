@@ -18,7 +18,6 @@ class Tembow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       left: -halfDistance,
-      top: bigSize * 0.5,
       child: Container(
         child: Column(
           children: [
