@@ -54,6 +54,7 @@ class IndexPage extends StatelessWidget {
                         child: SettingButton(),
                       ),
                       Container(
+                        // TODO: 画面サイズに合わせて変更できるようにする必要がある
                         height: 400.0,
                         child: GameControl(),
                       ),

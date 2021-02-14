@@ -23,6 +23,7 @@ enum GameType {
 class SettingButton extends StatelessWidget {
   final double iconSize;
 
+  // TODO: 画面サイズに合わせて変更できるようにする必要がある
   SettingButton({this.iconSize = 50.0});
 
   @override

@@ -67,6 +67,7 @@ class _GameStartButton extends StatelessWidget {
     this.text, {
     this.onPressed,
     this.color,
+    // TODO: 画面サイズに合わせて変更できるようにする必要がある
     this.width = 200.0,
   });
 
@@ -74,6 +75,7 @@ class _GameStartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       color: this.color != null ? this.color : Theme.of(context).buttonColor,
+      // TODO: Themeを使用して色の指定をできるようにしたい
       child: Text(text, style: TextStyle(color: Color(0xFF4A967F))),
       onPressed: onPressed,
       minWidth: width,
