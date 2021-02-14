@@ -24,23 +24,29 @@ class IndexPage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Container(
-                    alignment: Alignment.topRight,
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    child: SettingWidget(),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      alignment: Alignment.center,
+                      child: SettingWidget(),
+                    ),
                   ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                    child: GameTitleWidget(),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      child: GameTitleWidget(),
+                    ),
                   ),
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.6,
-                      child: GameWidget()),
+                  Expanded(
+                    flex: 6,
+                    child: Container(
+                      child: GameWidget(),
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
-        // backgroundColor: Color(0xFFBEEDED),
+          ], // backgroundColor: Color(0xFFBEEDED),
         ),
       ),
     );
@@ -55,17 +61,16 @@ class GameTitleWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          child: Text('TE',
-              style: TextStyle(
-                  fontFamily: 'Cuprum',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 80.0,
-                  color: Colors.white))
-        ),
+            child: Text('TE',
+                style: TextStyle(
+                    fontFamily: 'Grandstander',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 80.0,
+                    color: Colors.white))),
         Container(
           child: Text('M',
               style: TextStyle(
-                  fontFamily: 'Cuprum',
+                  fontFamily: 'Grandstander',
                   fontWeight: FontWeight.bold,
                   fontSize: 80.0,
                   color: Color(0xFF4A967F))),
@@ -73,7 +78,7 @@ class GameTitleWidget extends StatelessWidget {
         Container(
           child: Text('BOW',
               style: TextStyle(
-                  fontFamily: 'Cuprum',
+                  fontFamily: 'Grandstander',
                   fontWeight: FontWeight.bold,
                   fontSize: 80.0,
                   color: Colors.white)),
@@ -93,8 +98,9 @@ class GameWidget extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            IndexRaisedButton(
-              child: Text('1 round', style: TextStyle(color: Color(0xFF4A967F))),
+            IndexFlatButton(
+              child:
+                  Text('1 round', style: TextStyle(color: Color(0xFF4A967F))),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -104,8 +110,9 @@ class GameWidget extends StatelessWidget {
                 ),
               ),
             ),
-            IndexRaisedButton(
-              child: Text('Half round', style: TextStyle(color: Color(0xFF4A967F))),
+            IndexFlatButton(
+              child: Text('Half round',
+                  style: TextStyle(color: Color(0xFF4A967F))),
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -127,9 +134,10 @@ class GameWidget extends StatelessWidget {
             //     ),
             //   ),
             // ),
-            IndexRaisedButton(
-              color: Colors.white,
-              child: Text('Tutorial', style: TextStyle(color: Color(0xFF4A967F))),
+            IndexFlatButton(
+              // color: Colors.white,
+              child:
+                  Text('Tutorial', style: TextStyle(color: Color(0xFF4A967F))),
               onPressed: () async {
                 if (await canLaunch(
                     "https://www.youtube.com/watch?v=C4YfppkXhfM")) {
@@ -178,23 +186,21 @@ class SettingWidget extends StatelessWidget {
   }
 }
 
-class IndexRaisedButton extends StatelessWidget {
+class IndexFlatButton extends StatelessWidget {
   final Widget child;
   final VoidCallback onPressed;
   final Color color;
   final double width;
 
-  IndexRaisedButton({this.child, this.onPressed, this.color=Colors.white, this.width=200.0});
+  IndexFlatButton({this.child, this.onPressed, this.color, this.width = 200.0});
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(
-      buttonColor: color,
+    return FlatButton(
+      color: this.color != null ? this.color : Theme.of(context).buttonColor,
+      child: child,
+      onPressed: onPressed,
       minWidth: width,
-      child: RaisedButton(
-        child: child,
-        onPressed: onPressed,
-      ),
     );
   }
 }

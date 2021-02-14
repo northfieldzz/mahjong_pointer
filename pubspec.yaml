@@ -85,3 +85,10 @@ flutter:
         - asset: assets/fonts/Cuprum/Cuprum-Italic-VariableFont_wght.ttf
           style: italic
           weight: 700 # assets/fonts/Cuprum-Italic-VariableFont_wght.ttfのウェイトを指定
+    - family: Grandstander
+      fonts:
+        - asset: assets/fonts/Grandstander/static/Grandstander-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Grandstander/Grandstander-Italic-VariableFont_wght.ttf
+          style: italic
+          weight: 700
