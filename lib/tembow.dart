@@ -47,13 +47,13 @@ class Tembow extends StatelessWidget {
   }
 
   /// 大きい玉のサイズ
-  double get bigSize => baseSize * 20;
+  double get bigSize => smallSize * 2;
 
   /// 大きい玉ウィジットの構築
   Widget _buildBigBall() {
     return _Ball(
       diameter: bigSize,
-      padding: EdgeInsets.all(padding * 4),
+      padding: EdgeInsets.all(smallSidePadding * 2),
     );
   }
 

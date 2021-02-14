@@ -9,6 +9,7 @@ class ThemeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: BoxConstraints.expand(),
       padding: EdgeInsets.all(20.0),
       child: child,
     );

@@ -20,12 +20,20 @@ enum GameType {
   Full,
 }
 
-class SettingPopUpButton extends StatelessWidget {
+class SettingButton extends StatelessWidget {
+  final double iconSize;
+
+  SettingButton({this.iconSize = 50.0});
+
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<MahjongPointerAppState>();
+    final state = context.watch<IndexPageState>();
     return PopupMenuButton(
-      icon: Icon(Icons.settings),
+      icon: Icon(
+        Icons.settings,
+        // size: iconSize,
+        color: Theme.of(context).iconTheme.color,
+      ),
       itemBuilder: (context) {
         return [
           PopupMenuItem(
