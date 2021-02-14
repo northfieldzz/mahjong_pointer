@@ -17,6 +17,7 @@ class IndexPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         body: Stack(
+          alignment: Alignment.center,
           children: [
             Tembow(),
             ThemeContainer(
