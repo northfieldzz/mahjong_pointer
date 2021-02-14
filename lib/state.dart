@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'game/setting/objects.dart';
+import 'game/player/objects.dart';
+import 'game/setting.dart';
 
-class GameWidgetState extends ChangeNotifier {
-  Setting setting = Setting();
-
-  void setSetting(Setting _setting) {
-    if (_setting != null) {
-      setting = _setting;
-      notifyListeners();
-    }
-  }
+class IndexPageState extends ChangeNotifier {
+  var setting = Setting();
+  List<Player> players = [];
+  Player playerTop;
+  Player playerLeft;
+  Player playerBottom;
+  Player playerRight;
 }

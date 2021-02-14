@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/game/objects.dart';
+
+import 'objects.dart';
 
 /// 支払うプレイヤーのウィジット
 ///
