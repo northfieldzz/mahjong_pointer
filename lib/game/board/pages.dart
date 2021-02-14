@@ -69,10 +69,10 @@ class ScoreBoardEachGame extends StatelessWidget {
     );
   }
 
-  Widget _buildBodyCell(String label) {
-    return Container(
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-      child: Center(child: Text(label, textAlign: TextAlign.center)),
-    );
-  }
+  // Widget _buildBodyCell(String label) {
+  //   return Container(
+  //     padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+  //     child: Center(child: Text(label, textAlign: TextAlign.center)),
+  //   );
+  // }
 }

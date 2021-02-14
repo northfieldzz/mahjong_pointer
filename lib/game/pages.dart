@@ -114,7 +114,6 @@ class PointWidget extends StatelessWidget {
                                 );
                                 if (isOk) {
                                   gameState.reach(reachPoint);
-                                  constratins:
                                   BoxConstraints.loose(Size(10.0, 10.0));
                                   debtor.isCall = true;
                                 }
