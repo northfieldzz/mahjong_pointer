@@ -20,6 +20,7 @@ class MahjongPointerApp extends StatelessWidget {
         primarySwatch: Colors.green,
         primaryColor: const Color.fromARGB(255, 190, 237, 237),
         accentColor: const Color.fromARGB(255, 250, 248, 159),
+        dividerColor: const Color.fromARGB(255, 74, 150, 127),
         scaffoldBackgroundColor: const Color.fromARGB(255, 190, 237, 237),
         buttonColor: const Color.fromARGB(255, 255, 255, 255),
         iconTheme: const IconThemeData.fallback().copyWith(
@@ -35,9 +36,9 @@ class MahjongPointerApp extends StatelessWidget {
 class IndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
           alignment: Alignment.center,
           children: [
             Tembow(),

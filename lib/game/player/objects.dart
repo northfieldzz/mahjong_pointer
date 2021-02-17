@@ -1,7 +1,7 @@
 import 'point/score.dart';
 
 /// 方角
-enum Direction {
+enum HouseDirection {
   /// 東
   East,
 
@@ -15,12 +15,12 @@ enum Direction {
   North,
 }
 
-extension DirectionExtension on Direction {
-  static const displays = <Direction, String>{
-    Direction.East: '東',
-    Direction.South: '南',
-    Direction.West: '西',
-    Direction.North: '北'
+extension DirectionExtension on HouseDirection {
+  static const displays = <HouseDirection, String>{
+    HouseDirection.East: '東',
+    HouseDirection.South: '南',
+    HouseDirection.West: '西',
+    HouseDirection.North: '北'
   };
 
   /// 表示名
@@ -30,7 +30,7 @@ extension DirectionExtension on Direction {
 /// プレイヤー
 class Player {
   String name;
-  Direction direction;
+  HouseDirection direction;
   int initialPoint;
   List<int> _points = [];
   bool isCall;
@@ -41,7 +41,7 @@ class Player {
     this.initialPoint,
     this.isCall = false,
   });
-  bool get isHost => direction == Direction.East;
+  bool get isHost => direction == HouseDirection.East;
   bool get isPicked => direction == null;
   int get point {
     var _point = initialPoint;
