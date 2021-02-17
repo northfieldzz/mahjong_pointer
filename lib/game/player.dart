@@ -1,7 +1,10 @@
-import 'point/score.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'player/point/score.dart';
 
 /// 方角
-enum HouseDirection {
+enum Direction {
   /// 東
   East,
 
@@ -15,12 +18,12 @@ enum HouseDirection {
   North,
 }
 
-extension DirectionExtension on HouseDirection {
-  static const displays = <HouseDirection, String>{
-    HouseDirection.East: '東',
-    HouseDirection.South: '南',
-    HouseDirection.West: '西',
-    HouseDirection.North: '北'
+extension DirectionExtension on Direction {
+  static const displays = <Direction, String>{
+    Direction.East: '東',
+    Direction.South: '南',
+    Direction.West: '西',
+    Direction.North: '北'
   };
 
   /// 表示名
@@ -30,19 +33,22 @@ extension DirectionExtension on HouseDirection {
 /// プレイヤー
 class Player {
   String name;
-  HouseDirection direction;
+  Direction direction;
   int initialPoint;
   List<int> _points = [];
   bool isCall;
 
   Player({
-    this.name,
-    this.direction,
-    this.initialPoint,
+    @required this.name,
+    @required this.direction,
+    @required this.initialPoint,
     this.isCall = false,
   });
-  bool get isHost => direction == HouseDirection.East;
+
+  bool get isHost => direction == Direction.East;
+
   bool get isPicked => direction == null;
+
   int get point {
     var _point = initialPoint;
     _points.forEach((score) => _point += score);
@@ -53,6 +59,7 @@ class Player {
   }
 
   List<int> get scores => _points;
+
   void registerPoints({
     Score score,
     Player winner,

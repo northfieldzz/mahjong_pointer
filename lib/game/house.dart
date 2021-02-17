@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'objects.dart';
+import 'player.dart';
 import 'position.dart';
 
 /// 家クラス
@@ -10,7 +10,7 @@ class House extends StatelessWidget {
   final Player player;
 
   /// 画面上のプレイヤーの位置
-  final PositionDirection direction;
+  final Position position;
 
   /// ウィジット拡大時ベースの比率
   final double baseSize;
@@ -20,7 +20,7 @@ class House extends StatelessWidget {
 
   House({
     @required this.player,
-    @required this.direction,
+    @required this.position,
     this.diameter = 225,
     this.baseSize = 5.0,
   });
@@ -40,12 +40,12 @@ class House extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: direction == PositionDirection.Top ? -halfBallDiameter : null,
-      left: direction == PositionDirection.Left ? -halfBallDiameter : null,
-      right: direction == PositionDirection.Right ? -halfBallDiameter : null,
-      bottom: direction == PositionDirection.Bottom ? -halfBallDiameter : null,
+      top: position == Position.Top ? -halfBallDiameter : null,
+      left: position == Position.Left ? -halfBallDiameter : null,
+      right: position == Position.Right ? -halfBallDiameter : null,
+      bottom: position == Position.Bottom ? -halfBallDiameter : null,
       child: Transform.rotate(
-        angle: direction.getAngle(),
+        angle: position.getAngle(),
         child: Container(
           child: Stack(
             alignment: Alignment.center,
@@ -76,6 +76,7 @@ class House extends StatelessWidget {
                   color: Colors.white,
                 ),
                 child: Container(
+                  // TODO: サイズの可変化
                   padding: EdgeInsets.only(top: 35.0 - 2 * circleWidth),
                   child: Column(
                     children: [

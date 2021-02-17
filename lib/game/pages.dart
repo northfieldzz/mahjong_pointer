@@ -1,59 +1,122 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'center_console.dart';
-import 'player/house.dart';
-import 'player/objects.dart';
-import 'player/position.dart';
+import 'house.dart';
+import 'player.dart';
+import 'position.dart';
 import 'setting.dart';
 
+class GameState extends ChangeNotifier {
+  Player playerTop;
+  Player playerLeft;
+  Player playerRight;
+  Player playerBottom;
+
+  Direction direction = Direction.East;
+  int rotatedCount;
+  int stockPoint;
+  int noMoreReaderCount;
+
+  GameState({
+    this.playerTop,
+    this.playerLeft,
+    this.playerRight,
+    this.playerBottom,
+  }) {
+    direction = Direction.East;
+    rotatedCount = 0;
+    stockPoint = 0;
+    noMoreReaderCount = 0;
+  }
+
+  String get title => '${direction.display}${(rotatedCount + 1).toString()}局';
+
+  String get subtitle => '${noMoreReaderCount.toString()}本場';
+}
+
 /// ゲーム画面
-class GamePage extends StatelessWidget {
+class Game extends StatelessWidget {
+  final Player playerTop;
+  final Player playerLeft;
+  final Player playerBottom;
+  final Player playerRight;
   final Setting setting;
   final bool isHalf;
 
-  GamePage({@required this.setting, this.isHalf = false});
+  Game({
+    @required this.playerTop,
+    @required this.playerLeft,
+    @required this.playerBottom,
+    this.playerRight,
+    @required this.setting,
+    this.isHalf = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Align(
-          child: Center(
-            child: Container(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.width,
-                    child: Stack(
-                      overflow: Overflow.visible,
-                      alignment: Alignment.center,
-                      children: [
-                        House(
-                          player: Player(),
-                          direction: PositionDirection.Top,
-                        ),
-                        House(
-                          player: Player(),
-                          direction: PositionDirection.Left,
-                        ),
-                        House(
-                          player: Player(),
-                          direction: PositionDirection.Right,
-                        ),
-                        House(
-                          player: Player(),
-                          direction: PositionDirection.Bottom,
-                        ),
-                      ],
-                    ),
-                  ),
-                  CenterConsole(),
-                ],
+        child: Stack(
+          children: [
+            Positioned(
+              top: 10.0,
+              left: 10.0,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back),
+                onPressed: () => Navigator.pop(context),
               ),
             ),
-          ),
+            Align(
+              child: Center(
+                child: ChangeNotifierProvider(
+                  create: (_) => GameState(
+                    playerTop: playerTop,
+                    playerLeft: playerLeft,
+                    playerRight: playerRight,
+                    playerBottom: playerBottom,
+                  ),
+                  builder: (context, child) {
+                    var state = context.watch<GameState>();
+                    return Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.width,
+                          child: Stack(
+                            overflow: Overflow.visible,
+                            alignment: Alignment.center,
+                            children: [
+                              House(
+                                player: state.playerTop,
+                                position: Position.Top,
+                              ),
+                              House(
+                                player: state.playerLeft,
+                                position: Position.Left,
+                              ),
+                              House(
+                                player: state.playerBottom,
+                                position: Position.Bottom,
+                              ),
+                              state.playerRight != null
+                                  ? House(
+                                      player: state.playerRight,
+                                      position: Position.Right,
+                                    )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                        CenterConsole(),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
