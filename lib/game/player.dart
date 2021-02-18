@@ -1,4 +1,7 @@
-import 'point/score.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'player/point/score.dart';
 
 /// 方角
 enum Direction {
@@ -36,13 +39,16 @@ class Player {
   bool isCall;
 
   Player({
-    this.name,
-    this.direction,
-    this.initialPoint,
+    @required this.name,
+    @required this.direction,
+    @required this.initialPoint,
     this.isCall = false,
   });
+
   bool get isHost => direction == Direction.East;
+
   bool get isPicked => direction == null;
+
   int get point {
     var _point = initialPoint;
     _points.forEach((score) => _point += score);
@@ -53,6 +59,7 @@ class Player {
   }
 
   List<int> get scores => _points;
+
   void registerPoints({
     Score score,
     Player winner,

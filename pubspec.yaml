@@ -92,3 +92,6 @@ flutter:
         - asset: assets/fonts/Grandstander/Grandstander-Italic-VariableFont_wght.ttf
           style: italic
           weight: 700
+    - family: Skia
+      fonts:
+        - asset: assets/fonts/Skia/Skia.ttf

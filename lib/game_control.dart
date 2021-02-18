@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mahjong_pointer/game/player.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -18,7 +19,27 @@ class GameControl extends StatelessWidget {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GamePage(
+              builder: (context) => Game(
+                playerTop: Player(
+                  name: 'playerTop',
+                  initialPoint: 25000,
+                  direction: Direction.East,
+                ),
+                playerLeft: Player(
+                  name: 'playerTop',
+                  initialPoint: 25000,
+                  direction: Direction.South,
+                ),
+                playerBottom: Player(
+                  name: 'playerBottom',
+                  initialPoint: 25000,
+                  direction: Direction.West,
+                ),
+                playerRight: Player(
+                  name: 'playerRight',
+                  initialPoint: 25000,
+                  direction: Direction.North,
+                ),
                 setting: state.setting,
               ),
             ),
@@ -29,7 +50,22 @@ class GameControl extends StatelessWidget {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => GamePage(
+              builder: (context) => Game(
+                playerTop: Player(
+                  name: 'playerTop',
+                  initialPoint: 25000,
+                  direction: Direction.East,
+                ),
+                playerLeft: Player(
+                  name: 'playerLeft',
+                  initialPoint: 25000,
+                  direction: Direction.South,
+                ),
+                playerBottom: Player(
+                  name: 'playerBottom',
+                  initialPoint: 25000,
+                  direction: Direction.West,
+                ),
                 setting: state.setting,
                 isHalf: true,
               ),
