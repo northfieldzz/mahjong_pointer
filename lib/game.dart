@@ -4,7 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
-import 'game_state.dart';
+import 'game/setting.dart';
+
+class SettingsPageState extends ChangeNotifier {
+  Setting setting;
+
+  SettingsPageState({this.setting});
+}
 
 class SettingsPage extends StatelessWidget {
   @override

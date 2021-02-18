@@ -2,11 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'setting/game.dart';
-import 'setting/game_state.dart';
-import 'setting/player.dart';
-import 'setting/player_state.dart';
-import 'state.dart';
+import 'game.dart';
+import 'index.dart';
+import 'player.dart';
 
 /// ゲームタイプ
 enum GameType {

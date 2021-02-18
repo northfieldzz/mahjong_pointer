@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'game/pages.dart';
-import 'state.dart';
+import 'index.dart';
 
 class GameControl extends StatelessWidget {
   @override
@@ -23,22 +23,23 @@ class GameControl extends StatelessWidget {
                 playerTop: Player(
                   name: 'playerTop',
                   initialPoint: 25000,
-                  direction: Direction.East,
+                  isCall: true,
+                  direction: Direction.South,
                 ),
                 playerLeft: Player(
                   name: 'playerTop',
                   initialPoint: 25000,
-                  direction: Direction.South,
+                  direction: Direction.West,
                 ),
                 playerBottom: Player(
                   name: 'playerBottom',
                   initialPoint: 25000,
-                  direction: Direction.West,
+                  direction: Direction.North,
                 ),
                 playerRight: Player(
                   name: 'playerRight',
                   initialPoint: 25000,
-                  direction: Direction.North,
+                  direction: Direction.East,
                 ),
                 setting: state.setting,
               ),

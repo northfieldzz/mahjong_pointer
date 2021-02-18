@@ -41,7 +41,7 @@ class Player {
   Player({
     @required this.name,
     @required this.direction,
-    @required this.initialPoint,
+    this.initialPoint = 0,
     this.isCall = false,
   });
 
