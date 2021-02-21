@@ -1,13 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'game_control.dart';
-import 'logo.dart';
-import 'setting.dart';
-import 'state.dart';
-import 'tembow.dart';
-import 'widgets.dart';
+import 'index.dart';
 
 void main() => runApp(MahjongPointerApp());
 
@@ -29,44 +23,6 @@ class MahjongPointerApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(),
       home: IndexPage(),
-    );
-  }
-}
-
-class IndexPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Tembow(),
-            Logo(),
-            ThemeContainer(
-              child: ChangeNotifierProvider(
-                create: (_) => IndexPageState(),
-                builder: (context, _) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.topRight,
-                        child: SettingButton(),
-                      ),
-                      Container(
-                        // TODO: 画面サイズに合わせて変更できるようにする必要がある
-                        height: 400.0,
-                        child: GameControl(),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

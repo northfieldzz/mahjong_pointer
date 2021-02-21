@@ -78,13 +78,6 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
   fonts:
-    - family: Cuprum
-      fonts:
-        - asset: assets/fonts/Cuprum/Cuprum-VariableFont_wght.ttf
-          weight: 700 # assets/fonts/Cuprum-VariableFont_wght.ttfのウェイトを指定
-        - asset: assets/fonts/Cuprum/Cuprum-Italic-VariableFont_wght.ttf
-          style: italic
-          weight: 700 # assets/fonts/Cuprum-Italic-VariableFont_wght.ttfのウェイトを指定
     - family: Grandstander
       fonts:
         - asset: assets/fonts/Grandstander/static/Grandstander-Bold.ttf

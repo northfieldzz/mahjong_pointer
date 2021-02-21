@@ -8,6 +8,18 @@ import 'player.dart';
 import 'position.dart';
 import 'setting.dart';
 
+/// ゲームタイプ
+enum GameType {
+  /// 東風戦
+  One,
+
+  /// 半荘戦
+  Half,
+
+  /// 一荘戦
+  Full,
+}
+
 class GameState extends ChangeNotifier {
   Player playerTop;
   Player playerLeft;
@@ -43,7 +55,7 @@ class Game extends StatelessWidget {
   final Player playerBottom;
   final Player playerRight;
   final Setting setting;
-  final bool isHalf;
+  final GameType gameType;
 
   Game({
     @required this.playerTop,
@@ -51,7 +63,7 @@ class Game extends StatelessWidget {
     @required this.playerBottom,
     this.playerRight,
     @required this.setting,
-    this.isHalf = false,
+    this.gameType,
   });
 
   @override
