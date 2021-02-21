@@ -12,12 +12,20 @@ import 'widgets.dart';
 
 class IndexPageState extends ChangeNotifier {
   var setting = Setting();
-  List<Player> players = [
+  var players = [
     Player(name: '東さん', direction: Direction.East),
     Player(name: '南さん', direction: Direction.South),
     Player(name: '西さん', direction: Direction.West),
     Player(name: '北さん', direction: Direction.North),
   ];
+
+  void setInitial() {
+    for (var player in players) {
+      player.initialPoint = setting.initialPoint;
+    }
+  }
+
+  bool get isExistNorth => players.length == 4;
 }
 
 class IndexPage extends StatelessWidget {

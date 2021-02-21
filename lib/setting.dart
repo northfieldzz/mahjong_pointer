@@ -1,22 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mahjong_pointer/game/player.dart';
+import 'package:mahjong_pointer/game/setting.dart';
 import 'package:provider/provider.dart';
 
 import 'game.dart';
 import 'index.dart';
 import 'player.dart';
-
-/// ゲームタイプ
-enum GameType {
-  /// 東風戦
-  One,
-
-  /// 半荘戦
-  Half,
-
-  /// 一荘戦
-  Full,
-}
 
 class SettingButton extends StatelessWidget {
   final double iconSize;
@@ -39,17 +29,14 @@ class SettingButton extends StatelessWidget {
             child: FlatButton(
               child: Text('プレイヤー'),
               onPressed: () async {
-                final persons = await Navigator.push(
+                final persons = await Navigator.push<List<Player>>(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider(
-                      create: (_) => PlayersPageState(players: state.players),
-                      builder: (context, _) => PlayersPage(),
-                    ),
+                    builder: (_) => PlayersForm(players: state.players),
                   ),
                 );
                 if (persons != null) {
-                  // state.persons = persons;
+                  state.players = persons;
                 }
               },
             ),
@@ -58,13 +45,10 @@ class SettingButton extends StatelessWidget {
             child: FlatButton(
               child: Text('ゲーム設定'),
               onPressed: () async {
-                final setting = await Navigator.push(
+                final setting = await Navigator.push<Setting>(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider(
-                      create: (_) => SettingsPageState(setting: state.setting),
-                      builder: (context, _) => SettingsPage(),
-                    ),
+                    builder: (_) => SettingsForm(setting: state.setting),
                   ),
                 );
                 if (setting != null) {

@@ -1,6 +1,6 @@
 class Setting {
   /// 持ち点初期値
-  int defaultPoint = 25000;
+  int initialPoint = 25000;
 
   /// リーチ点
   int reachPoint = 1000;

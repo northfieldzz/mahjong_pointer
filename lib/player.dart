@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'game/player.dart';
+import 'widgets.dart';
 
-class PlayersPageState extends ChangeNotifier {
+class PlayersFormState extends ChangeNotifier {
   List<Player> players;
 
-  PlayersPageState({this.players});
+  PlayersFormState({this.players});
 
   bool get canAdd => players.length <= 3;
 
@@ -23,42 +23,41 @@ class PlayersPageState extends ChangeNotifier {
   }
 }
 
-class PlayersPage extends StatelessWidget {
+class PlayersForm extends StatelessWidget {
+  final List<Player> players;
+
+  PlayersForm({this.players});
+
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<PlayersPageState>();
-    return Scaffold(
-      appBar: AppBar(title: Text('Players')),
-      body: ThemeContainer(
-        child: Column(
-          children: [
-            ListView.builder(
+    return ChangeNotifierProvider(
+      create: (_) => PlayersFormState(players: players),
+      builder: (context, _) {
+        final state = context.watch<PlayersFormState>();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Players'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context, state.players),
+            ),
+          ),
+          body: ThemeContainer(
+            child: ListView.builder(
               itemCount: state.players.length,
-              itemBuilder: (_, index) =>
-                  PlayerInput(player: state.players[index]),
+              itemBuilder: (_, i) => _PlayerInput(player: state.players[i]),
             ),
-            Expanded(
-              child: state.canAdd
-                  ? IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () => state.add(),
-                    )
-                  : IconButton(
-                      icon: Icon(Icons.remove),
-                      onPressed: () => state.remove(),
-                    ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
-class PlayerInput extends StatelessWidget {
+class _PlayerInput extends StatelessWidget {
   final Player player;
 
-  PlayerInput({this.player});
+  _PlayerInput({this.player});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +69,7 @@ class PlayerInput extends StatelessWidget {
           labelText: 'player name',
           hintText: 'enter player name',
         ),
-        onChanged: (name) => player.name = name,
+        onChanged: (value) => player.name = value,
       ),
     );
   }

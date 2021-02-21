@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mahjong_pointer/game/player.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,30 +18,16 @@ class GameControl extends StatelessWidget {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Game(
-                playerTop: Player(
-                  name: 'playerTop',
-                  initialPoint: 25000,
-                  isCall: true,
-                  direction: Direction.South,
-                ),
-                playerLeft: Player(
-                  name: 'playerTop',
-                  initialPoint: 25000,
-                  direction: Direction.West,
-                ),
-                playerBottom: Player(
-                  name: 'playerBottom',
-                  initialPoint: 25000,
-                  direction: Direction.North,
-                ),
-                playerRight: Player(
-                  name: 'playerRight',
-                  initialPoint: 25000,
-                  direction: Direction.East,
-                ),
-                setting: state.setting,
-              ),
+              builder: (_) {
+                state.setInitial();
+                return Game(
+                  playerTop: state.players[0],
+                  playerLeft: state.players[1],
+                  playerBottom: state.players[2],
+                  playerRight: state.isExistNorth ? state.players[3] : null,
+                  setting: state.setting,
+                );
+              },
             ),
           ),
         ),
@@ -51,25 +36,34 @@ class GameControl extends StatelessWidget {
           onPressed: () => Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Game(
-                playerTop: Player(
-                  name: 'playerTop',
-                  initialPoint: 25000,
-                  direction: Direction.East,
-                ),
-                playerLeft: Player(
-                  name: 'playerLeft',
-                  initialPoint: 25000,
-                  direction: Direction.South,
-                ),
-                playerBottom: Player(
-                  name: 'playerBottom',
-                  initialPoint: 25000,
-                  direction: Direction.West,
-                ),
-                setting: state.setting,
-                isHalf: true,
-              ),
+              builder: (_) {
+                state.setInitial();
+                return Game(
+                  playerTop: state.players[0],
+                  playerLeft: state.players[1],
+                  playerBottom: state.players[2],
+                  playerRight: state.isExistNorth ? state.players[3] : null,
+                  setting: state.setting,
+                );
+              },
+            ),
+          ),
+        ),
+        _GameStartButton(
+          'Half round',
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) {
+                state.setInitial();
+                return Game(
+                  playerTop: state.players[0],
+                  playerLeft: state.players[1],
+                  playerBottom: state.players[2],
+                  playerRight: state.isExistNorth ? state.players[3] : null,
+                  setting: state.setting,
+                );
+              },
             ),
           ),
         ),

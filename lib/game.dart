@@ -6,60 +6,94 @@ import 'package:provider/provider.dart';
 
 import 'game/setting.dart';
 
-class SettingsPageState extends ChangeNotifier {
+class SettingsFormState extends ChangeNotifier {
   Setting setting;
 
-  SettingsPageState({this.setting});
-}
-
-class SettingsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<SettingsPageState>();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Settings'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_outlined),
-          onPressed: () => Navigator.pop(context, state.setting),
-        ),
-      ),
-      body: ThemeContainer(
-        child: Column(
-          children: [
-            DefaultPointInput(),
-          ],
-        ),
-      ),
-      resizeToAvoidBottomPadding: false,
-    );
+  void setIsFlowEast(bool status) {
+    setting.isFlowEast = status;
+    notifyListeners();
   }
+
+  void setIsCeilThousand(bool status) {
+    setting.isCeilThousand = status;
+    notifyListeners();
+  }
+
+  SettingsFormState({this.setting});
 }
 
-class DefaultPointInput extends StatelessWidget {
+class SettingsForm extends StatelessWidget {
+  final Setting setting;
+
+  SettingsForm({this.setting});
+
   @override
   Widget build(BuildContext context) {
-    final setting = context.select((SettingsPageState state) => state.setting);
-    return Column(
-      children: <Widget>[
-        TextField(
-          controller: TextEditingController(
-            text: setting.defaultPoint.toString(),
+    return ChangeNotifierProvider(
+      create: (_) => SettingsFormState(setting: setting),
+      builder: (context, _) {
+        final state = context.watch<SettingsFormState>();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Settings'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.pop(context, state.setting),
+            ),
           ),
-          keyboardType: TextInputType.number,
-          inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.digitsOnly,
-          ],
-          decoration: const InputDecoration(
-            labelText: 'default point',
-            hintText: 'enter default point',
+          body: ThemeContainer(
+            child: Column(
+              children: [
+                TextField(
+                  controller: TextEditingController(
+                    text: state.setting.initialPoint.toString(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'initial point',
+                    hintText: 'enter initial point',
+                  ),
+                  onChanged: (point) {
+                    if (point.isEmpty) point = '0';
+                    state.setting.initialPoint = int.parse(point);
+                  },
+                ),
+                TextField(
+                  controller: TextEditingController(
+                    text: state.setting.reachPoint.toString(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  decoration: const InputDecoration(
+                    labelText: 'reach point',
+                    hintText: 'enter reach point',
+                  ),
+                  onChanged: (point) {
+                    if (point.isEmpty) point = '0';
+                    state.setting.reachPoint = int.parse(point);
+                  },
+                ),
+                SwitchListTile(
+                  value: state.setting.isFlowEast,
+                  onChanged: state.setIsFlowEast,
+                  title: Text('流局で親流れ'),
+                ),
+                SwitchListTile(
+                  value: state.setting.isCeilThousand,
+                  onChanged: state.setIsCeilThousand,
+                  title: Text('1000点未満を切り捨てるか'),
+                ),
+              ],
+            ),
           ),
-          onChanged: (point) {
-            if (point.isEmpty) point = '0';
-            setting.defaultPoint = int.parse(point);
-          },
-        ),
-      ],
+          resizeToAvoidBottomPadding: false,
+        );
+      },
     );
   }
 }

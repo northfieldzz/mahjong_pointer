@@ -33,15 +33,15 @@ extension DirectionExtension on Direction {
 /// プレイヤー
 class Player {
   String name;
-  Direction direction;
   int initialPoint;
+  Direction direction;
   List<int> _points = [];
   bool isCall;
 
   Player({
     @required this.name,
-    @required this.direction,
     this.initialPoint = 0,
+    @required this.direction,
     this.isCall = false,
   });
 
