@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mahjong_score/score.dart';
 
-import 'player/point/score.dart';
 import 'player.dart';
 import 'setting.dart';
 
