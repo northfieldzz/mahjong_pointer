@@ -58,38 +58,30 @@ class GameState extends ChangeNotifier {
         playerRight,
       ];
 
-  void finish({
-    Player winner,
-    Player loser,
-    Score score,
-    bool isPicked,
-  }) {
+  void finish({Player winner, Player loser, Score score}) {
+    final isPicked = loser == null;
     playerTop.registerPoints(
       score: score,
       winner: winner,
       loser: loser,
-      isPicked: isPicked,
       stockPoint: stockPoint,
     );
     playerLeft.registerPoints(
       score: score,
       winner: winner,
       loser: loser,
-      isPicked: isPicked,
       stockPoint: stockPoint,
     );
     playerBottom.registerPoints(
       score: score,
       winner: winner,
       loser: loser,
-      isPicked: isPicked,
       stockPoint: stockPoint,
     );
     playerRight?.registerPoints(
       score: score,
       winner: winner,
       loser: loser,
-      isPicked: isPicked,
       stockPoint: stockPoint,
     );
     stockPoint = 0;

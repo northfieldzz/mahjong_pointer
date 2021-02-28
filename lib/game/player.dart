@@ -63,11 +63,10 @@ class Player {
     Score score,
     Player winner,
     Player loser,
-    bool isPicked,
     int stockPoint,
   }) {
     var _point = 0;
-    if (isPicked) {
+    if (loser == null) {
       // ツモの場合
       if (winner == this) {
         // 勝者の場合

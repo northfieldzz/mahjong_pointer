@@ -186,7 +186,7 @@ class _HouseSwitch extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => PointSelector(
                     isHost: player.isHost,
-                    isPicked: debtor.isPicked,
+                    isPicked: debtor == null,
                     consecutivelyCount: gameState.consecutivelyCount,
                   ),
                 ),
@@ -194,12 +194,7 @@ class _HouseSwitch extends StatelessWidget {
               if (score == null) {
                 return null;
               }
-              gameState.finish(
-                winner: player,
-                loser: debtor,
-                score: score,
-                isPicked: debtor.isPicked,
-              );
+              gameState.finish(winner: player, loser: debtor, score: score);
               if (player != gameState.eastPlayer) {
                 gameState.rotate();
               } else {
