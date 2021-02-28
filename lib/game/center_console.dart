@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets.dart';
+import 'delivery.dart';
 import 'pages.dart';
 import 'position.dart';
 
@@ -10,47 +12,55 @@ class CenterConsole extends StatelessWidget {
   /// Widgetの1辺の長さ
   final double distance;
 
-  CenterConsole({this.distance = 120});
+  final bool isReceive;
+
+  CenterConsole({
+    @required this.isReceive,
+    this.distance = 120,
+  });
 
   @override
   Widget build(BuildContext context) {
     var state = context.watch<GameState>();
     return Positioned(
-      child: Container(
-        height: distance,
-        width: distance,
-        color: Theme.of(context).dividerColor,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildText(context, state.title),
-                state.noMoreReaderCount > 0
-                    ? _buildText(context, state.subtitle)
-                    : Container(),
-              ],
-            ),
-            _ReachBar(
-              isLit: state.playerTop.isCall,
-              position: Position.Top,
-            ),
-            _ReachBar(
-              isLit: state.playerLeft.isCall,
-              position: Position.Left,
-            ),
-            _ReachBar(
-              isLit: state.playerBottom.isCall,
-              position: Position.Bottom,
-            ),
-            state.playerRight != null
-                ? _ReachBar(
-                    isLit: state.playerRight.isCall,
-                    position: Position.Right,
-                  )
-                : Container(),
-          ],
+      child: _CenterConsoleSwitch(
+        isReceive: isReceive,
+        child: Container(
+          height: distance,
+          width: distance,
+          color: Theme.of(context).dividerColor,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildText(context, state.title),
+                  state.consecutivelyCount > 0
+                      ? _buildText(context, state.subtitle)
+                      : Container(),
+                ],
+              ),
+              _ReachBar(
+                position: Position.Top,
+                isLit: state.playerTop.isCall,
+              ),
+              _ReachBar(
+                position: Position.Left,
+                isLit: state.playerLeft.isCall,
+              ),
+              _ReachBar(
+                position: Position.Bottom,
+                isLit: state.playerBottom.isCall,
+              ),
+              state.playerRight != null
+                  ? _ReachBar(
+                      position: Position.Right,
+                      isLit: state.playerRight.isCall,
+                    )
+                  : Container(),
+            ],
+          ),
         ),
       ),
     );
@@ -66,6 +76,48 @@ class CenterConsole extends StatelessWidget {
         color: Colors.white,
       ),
     );
+  }
+}
+
+class _CenterConsoleSwitch extends StatelessWidget {
+  final bool isReceive;
+  final Widget child;
+
+  _CenterConsoleSwitch({
+    @required this.child,
+    this.isReceive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final gameState = context.watch<GameState>();
+    final dragState = context.watch<DragAndDropState>();
+    return isReceive
+        ? CreditorWidget(
+            child: child,
+            onAccept: (debtor) async {
+              if (!debtor.isCall) {
+                final isOk = await showDialog<bool>(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => ConfirmDialog(
+                    text: 'リーチします？',
+                  ),
+                );
+                if (isOk) {
+                  gameState.reach(gameState.setting.reachPoint);
+                  BoxConstraints.loose(Size(10.0, 10.0));
+                  debtor.isCall = true;
+                }
+              }
+            },
+          )
+        : DebtorWidget(
+            child: child,
+            onDragStarted: dragState.dragCenterConsole,
+            onDragEnd: dragState.reset,
+            draggingChild: child,
+          );
   }
 }
 
