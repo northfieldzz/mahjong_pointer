@@ -113,6 +113,7 @@ class _CenterConsoleSwitch extends StatelessWidget {
             },
           )
         : DebtorWidget(
+            player: null,
             child: child,
             onDragStarted: dragState.dragCenterConsole,
             onDragEnd: dragState.reset,

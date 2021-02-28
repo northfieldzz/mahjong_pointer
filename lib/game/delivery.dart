@@ -65,14 +65,14 @@ class DragAndDropState extends ChangeNotifier {
 ///
 /// 支払うプレイヤーはドラッグできる
 class DebtorWidget extends StatelessWidget {
-  final Player debtor;
+  final Player player;
   final Widget child;
   final VoidCallback onDragStarted;
   final Function(Player) onDragEnd;
   final Widget draggingChild;
 
   DebtorWidget({
-    this.debtor,
+    @required this.player,
     this.child,
     @required this.onDragStarted,
     @required this.onDragEnd,
@@ -82,12 +82,12 @@ class DebtorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Draggable(
-      data: debtor,
+      data: player,
       child: child,
       onDragStarted: onDragStarted,
-      onDragEnd: (value) => onDragEnd(debtor),
-      onDraggableCanceled: (velocity, offset) => onDragEnd(debtor),
-      onDragCompleted: () => onDragEnd(debtor),
+      onDragEnd: (value) => onDragEnd(player),
+      onDraggableCanceled: (velocity, offset) => onDragEnd(player),
+      onDragCompleted: () => onDragEnd(player),
       feedback: child,
       childWhenDragging: draggingChild,
     );

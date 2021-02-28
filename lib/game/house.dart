@@ -208,6 +208,7 @@ class _HouseSwitch extends StatelessWidget {
             },
           )
         : DebtorWidget(
+            player: player,
             child: child,
             onDragStarted: onDragStarted,
             onDragEnd: onDragEnd,
